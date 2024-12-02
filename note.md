@@ -18,3 +18,5 @@ Parte di software, data, backend frontend databse
 Data science: 
 
 test sincroni o asincroni.
+
+modifica
