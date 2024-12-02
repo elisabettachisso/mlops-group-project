@@ -19,4 +19,3 @@ Data science:
 
 test sincroni o asincroni.
 
-modifica
