@@ -1,2 +1,5 @@
 streamlit
-sqlite3
+pandas
+matplotlib
+lightgbm
+scikit-learn
