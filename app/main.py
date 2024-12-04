@@ -1,36 +1,39 @@
 import streamlit as st
-from app.auth import login, registration
-from app.database import initialize_db
+from auth import login, registration
+from database import initialize_db
 
 # Inizializza il database
 initialize_db()
 
-# Stato iniziale
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
     st.session_state.username = None
+
 if "page" not in st.session_state:
     st.session_state.page = "home"
 
-# Funzioni per navigazione
+# Funzioni per la gestione delle pagine
+def go_to_login():
+    st.session_state.page = "login"
+
+def go_to_register():
+    st.session_state.page = "register"
+
 def logout():
     st.session_state.logged_in = False
     st.session_state.username = None
     st.session_state.page = "home"
-    st.experimental_rerun()
 
 def home_page():
     st.title("Benvenuti nella Web App")
     st.write("Seleziona un'opzione:")
-    col1, col2 = st.columns(2)
+    col1, col2, col3= st.columns(3)
     with col1:
-        if st.button("Vai al Login"):
-            st.session_state.page = "login"
-            st.experimental_rerun()
+        st.button("Vai al Login", on_click=go_to_login)
     with col2:
-        if st.button("Vai alla Registrazione"):
-            st.session_state.page = "register"
-            st.experimental_rerun()
+        st.button("Vai alla Registrazione", on_click=go_to_register)
+    with col3:
+        st.button("Vai alla home", on_click=main_page)  
 
 def main_page():
     st.title("Benvenuti nella Web App")
@@ -39,14 +42,14 @@ def main_page():
 
 # Gestione principale
 def main():
-    # Controlla lo stato di login
     if st.session_state.logged_in:
         main_page()
     else:
         if st.session_state.page == "home":
             home_page()
         elif st.session_state.page == "login":
-            login()
+            if login():
+                st.session_state.page = "main"
         elif st.session_state.page == "register":
             registration()
 
