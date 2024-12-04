@@ -3,3 +3,5 @@ pandas
 matplotlib
 lightgbm
 scikit-learn
+bcrypt 
+streamlit_authenticator

@@ -1,4 +1,5 @@
 import sqlite3
+from bcrypt import hashpw, gensalt, checkpw
 
 # Inizializza il database
 def initialize_db():
@@ -14,22 +15,25 @@ def initialize_db():
     conn.commit()
     conn.close()
 
-# Aggiunge un nuovo utente al database
+# Aggiunge un nuovo utente con password hashata
 def add_user(username, password):
     conn = sqlite3.connect("db/users.db")
     cursor = conn.cursor()
+    hashed_password = hashpw(password.encode(), gensalt())
     try:
-        cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
+        cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, hashed_password))
         conn.commit()
     except sqlite3.IntegrityError:
         raise ValueError("Nome utente già esistente.")
     conn.close()
 
-# Verifica se l'utente esiste
+# Verifica l'utente con password hashata
 def verify_user(username, password):
     conn = sqlite3.connect("db/users.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+    cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
     user = cursor.fetchone()
     conn.close()
-    return user
+    if user and checkpw(password.encode(), user[0]):
+        return True
+    return False
