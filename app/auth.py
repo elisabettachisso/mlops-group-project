@@ -34,19 +34,24 @@ def login():
             st.error("Authentication failed: login returned None")
             return None
 
-        name, authentication_status, username = result
+        name, authentication_status, username = None, None, None # Inizializza le variabili 
+        try: 
+            name, authentication_status, username = authenticator.login("Login", "main") 
+        except ValueError as e:
+            st.error(f"An error occurred: {e}") 
+            return None
 
         if authentication_status:
             st.session_state.logged_in = True
             st.session_state.username = username
             st.success(f"Welcome {name}")
+            st.session_state.page = "main"
         elif authentication_status is False:
             st.error("Username/password is incorrect")
         elif authentication_status is None:
             st.warning("Please enter your username and password")
     
         return authentication_status
-
 
 
 
