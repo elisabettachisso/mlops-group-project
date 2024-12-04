@@ -1,21 +1,28 @@
 import streamlit as st
-from app.database import add_user, verify_user
+from app.database import verify_user
 
 # Login
 def login():
     st.title("Login")
     username = st.text_input("Nome utente")
     password = st.text_input("Password", type="password")
-    login_button = st.button("Login")
-    if login_button:
+    
+    if "login_attempted" not in st.session_state:
+        st.session_state.login_attempted = False
+
+    if st.button("Login") or st.session_state.login_attempted:
+        if not st.session_state.login_attempted:
+            st.session_state.login_attempted = True
+
         if verify_user(username, password):
             st.success("Login effettuato con successo!")
             st.session_state.logged_in = True
             st.session_state.username = username
-            return True
+            st.session_state.page = "main"
+            st.experimental_rerun()  # Reindirizza immediatamente
         else:
             st.error("Nome utente o password errati.")
-    return False
+            st.session_state.login_attempted = False
 
 # Registrazione
 def registration():

@@ -51,3 +51,5 @@ Domanda: quante settimane di lavoro?
 - KNN
 
 
+## LINK UTILI
+https://github.com/mkhorasani/Streamlit-Authenticator

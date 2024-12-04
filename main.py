@@ -5,33 +5,32 @@ from app.database import initialize_db
 # Inizializza il database
 initialize_db()
 
+# Stato iniziale
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
     st.session_state.username = None
-
 if "page" not in st.session_state:
     st.session_state.page = "home"
 
-# Funzioni per la gestione delle pagine
-def go_to_login():
-    st.session_state.page = "login"
-
-def go_to_register():
-    st.session_state.page = "register"
-
+# Funzioni per navigazione
 def logout():
     st.session_state.logged_in = False
     st.session_state.username = None
     st.session_state.page = "home"
+    st.experimental_rerun()
 
 def home_page():
     st.title("Benvenuti nella Web App")
     st.write("Seleziona un'opzione:")
     col1, col2 = st.columns(2)
     with col1:
-        st.button("Vai al Login", on_click=go_to_login)
+        if st.button("Vai al Login"):
+            st.session_state.page = "login"
+            st.experimental_rerun()
     with col2:
-        st.button("Vai alla Registrazione", on_click=go_to_register)
+        if st.button("Vai alla Registrazione"):
+            st.session_state.page = "register"
+            st.experimental_rerun()
 
 def main_page():
     st.title("Benvenuti nella Web App")
@@ -40,15 +39,14 @@ def main_page():
 
 # Gestione principale
 def main():
+    # Controlla lo stato di login
     if st.session_state.logged_in:
         main_page()
     else:
         if st.session_state.page == "home":
             home_page()
         elif st.session_state.page == "login":
-            if login():
-                st.session_state.page = "main"
-                st.experimental_rerun()
+            login()
         elif st.session_state.page == "register":
             registration()
 
