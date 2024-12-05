@@ -1,6 +1,6 @@
 import streamlit as st
-from app.auth import login, registration
-from app.database import initialize_db
+from auth import login, registration
+from database import initialize_db
 
 # Inizializza il database
 initialize_db()
@@ -27,11 +27,13 @@ def logout():
 def home_page():
     st.title("Benvenuti nella Web App")
     st.write("Seleziona un'opzione:")
-    col1, col2 = st.columns(2)
+    col1, col2, col3= st.columns(3)
     with col1:
         st.button("Vai al Login", on_click=go_to_login)
     with col2:
         st.button("Vai alla Registrazione", on_click=go_to_register)
+    with col3:
+        st.button("Vai alla home", on_click=main_page)  
 
 def main_page():
     st.title("Benvenuti nella Web App")
@@ -48,7 +50,6 @@ def main():
         elif st.session_state.page == "login":
             if login():
                 st.session_state.page = "main"
-                st.experimental_rerun()
         elif st.session_state.page == "register":
             registration()
 

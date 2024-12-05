@@ -1,39 +1,36 @@
 import sqlite3
-from bcrypt import hashpw, gensalt, checkpw
 
-# Inizializza il database
 def initialize_db():
-    conn = sqlite3.connect("db/users.db")
-    cursor = conn.cursor()
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
-    )
-    """)
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute('''
+              CREATE TABLE IF NOT EXISTS users (
+                  username TEXT PRIMARY KEY,
+                  name TEXT,
+                  email TEXT,
+                  password TEXT
+              )
+              ''')
     conn.commit()
     conn.close()
 
-# Aggiunge un nuovo utente con password hashata
-def add_user(username, password):
-    conn = sqlite3.connect("db/users.db")
-    cursor = conn.cursor()
-    hashed_password = hashpw(password.encode(), gensalt())
+def add_user(username, name, email, password):
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
     try:
-        cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, hashed_password))
+        c.execute('INSERT INTO users (username, name, email, password) VALUES (?, ?, ?, ?)', 
+                  (username, name, email, password))
         conn.commit()
     except sqlite3.IntegrityError:
-        raise ValueError("Nome utente già esistente.")
-    conn.close()
+        return False
+    finally:
+        conn.close()
+    return True
 
-# Verifica l'utente con password hashata
-def verify_user(username, password):
-    conn = sqlite3.connect("db/users.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
-    user = cursor.fetchone()
+def get_users():
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM users')
+    users = c.fetchall()
     conn.close()
-    if user and checkpw(password.encode(), user[0]):
-        return True
-    return False
+    return users
