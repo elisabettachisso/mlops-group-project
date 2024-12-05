@@ -1,6 +1,7 @@
 import streamlit as st
 from database import initialize_database, add_response, get_responses
 from route import go_to_login, go_to_register, logout
+from mlops import calculate_risk
 
 initialize_database()
 
@@ -12,8 +13,6 @@ def home_page():
         st.button("Vai al Login", on_click=go_to_login)
     with col2:
         st.button("Vai alla Registrazione", on_click=go_to_register)
-
-
 
 def main_page():
     # Configurazione della pagina
@@ -104,13 +103,17 @@ def fill_questionnaire():
     financial_stress = st.slider("Financial stress", min_value=0, max_value=5, step=1)
     family_history = st.radio("Fam History", ("Yes", "No"))
 
-    if st.button("Invia risposta"): 
+    if st.button("Invia risposta"):
         if add_response(st.session_state.user_id, gender, age, accademic_pressure, cgpa, study_satisfaction, sleep_duration, dietary_habits, degree, suicidal_thoughts,
-                        study_hours, financial_stress, family_history): 
+                        study_hours, financial_stress, family_history):  
             st.success("Risposta inviata con successo!") 
-        else: st.error("Si è verificato un errore durante l'invio della risposta.")
-    st.write("Risposte al questionario:") 
+        else: 
+            st.error("Si è verificato un errore durante l'invio della risposta.")
+    # Calcolo del rischio
+    risk_percentage = calculate_risk(gender, age, accademic_pressure, cgpa, study_satisfaction, sleep_duration, dietary_habits, degree, suicidal_thoughts, study_hours, financial_stress, family_history)
+    st.write(f"Il tuo rischio stimato di depressione è: {risk_percentage}%") 
     responses = get_responses(st.session_state.user_id) 
+    
     for res in responses: 
         st.write(res)
 

@@ -1,8 +1,6 @@
 import streamlit as st
 from auth import login, registration
 from pages import main_page, home_page
-from database import initialize_database
-
 
 if "logged_in" not in st.session_state: 
     st.session_state.logged_in = False 

@@ -59,7 +59,7 @@ def predict_depression_risk(model, data):
     probability = model.predict_proba(data)[0][1]  # Probabilità della classe "Depresso"
     return round(probability * 100, 2)  # Converte in percentuale e arrotonda
 
-def calculate_risk(age, study_hours, stress_level, exercise):
+def calculate_risk(gender, age, academic_pressure, cgpa, study_satisfaction, sleep_duration, dietary_habits, degree, suicidal_thoughts, study_hours, financial_stress, family_history):
     """
     Calcola il rischio di depressione basandosi sui dati dell'utente.
     :return: Percentuale di rischio di depressione.
@@ -68,8 +68,15 @@ def calculate_risk(age, study_hours, stress_level, exercise):
     model = load_model()
     
     # Preprocessa i dati
-    data = preprocess_data(age, study_hours, stress_level, exercise)
+    data = preprocess_data(
+        gender, age, academic_pressure, cgpa, study_satisfaction,
+        sleep_duration, dietary_habits, degree, suicidal_thoughts,
+        study_hours, financial_stress, family_history
+    )
     
     # Calcola il rischio
-    risk_percentage = predict_depression_risk(model, data)
+    risk_probability = model.predict_proba(data)[0][1]  # Probabilità della classe "Depresso"
+    risk_percentage = round(risk_probability * 100, 2)  # Converti in percentuale e arrotonda
+    
     return risk_percentage
+
