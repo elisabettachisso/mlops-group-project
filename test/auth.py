@@ -13,8 +13,7 @@ def login():
         if user:
             st.session_state.logged_in = True
             st.session_state.username = username
-            st.success(f"Welcome, {user[1]}")
-            return True
+            st.session_state.user_id = user[0]
         else:
             st.error("Invalid username or password")
             return False

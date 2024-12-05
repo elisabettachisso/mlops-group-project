@@ -10,3 +10,4 @@ def logout():
     st.session_state.logged_in = False
     st.session_state.username = None
     st.session_state.page = "home"
+    st.session_state.user_id = None
