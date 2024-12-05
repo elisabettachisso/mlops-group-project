@@ -31,30 +31,19 @@ def main_page():
         "Benvenuto in **MindHug**, un'app progettata per aiutarti a monitorare il tuo benessere mentale "
         "e fornire suggerimenti personalizzati per prenderti cura di te stesso."
     )
-
-
     st.image("images/logomindhug.png", width=200)  
 
+    # Barra laterale per navigare 
+    with st.sidebar: 
+        selection = st.radio("Navigazione", ["Home", "Suggerimenti", "Compila Questionario"])
+
+    if selection == "Home": 
+        display_statistics() 
+    elif selection == "Suggerimenti": 
+        display_suggestions() 
+    elif selection == "Compila Questionario": 
+        fill_questionnaire()
     # Sezione di input
-    st.markdown("### Compila il questionario")
-    age = st.number_input("Quanti anni hai?", min_value=1, max_value=100, step=1)
-    study_hours = st.slider("Quante ore studi al giorno?", min_value=0, max_value=16, step=1)
-    stress_level = st.selectbox(
-        "Come descriveresti il tuo livello di stress?",
-        ["Basso", "Moderato", "Alto"]
-    )
-    exercise = st.selectbox(
-        "Fai esercizio fisico regolarmente?",
-        ["Sì", "No"]
-    )
-    if st.button("Invia risposta"): 
-        if add_response(st.session_state.user_id, age, study_hours, stress_level, exercise): 
-            st.success("Risposta inviata con successo!") 
-        else: st.error("Si è verificato un errore durante l'invio della risposta.")
-    st.write("Risposte al questionario:") 
-    responses = get_responses() 
-    for res in responses: 
-        st.write(res)
 
     # Sezione aggiuntiva
     st.markdown("### Risorse Utili")
@@ -70,3 +59,59 @@ def main_page():
     if st.button("Logout"):
         logout()
         st.rerun()
+
+def display_statistics(): 
+        st.header("Statistiche") 
+        responses = get_responses(st.session_state.user_id)
+        if responses: 
+            st.write("Ecco alcune statistiche dalle risposte al questionario:") 
+        # Aggiungi qui le tue statistiche, per esempio: 
+            total_responses = len(responses) 
+            st.write(f"Numero totale di risposte: {total_responses}") 
+        # Altre statistiche possono essere aggiunte qui 
+        else: 
+            st.write("Non ci sono risposte al questionario ancora.")
+
+def display_suggestions(): 
+        st.header("Suggerimenti") 
+        st.write("Ecco alcuni suggerimenti utili:") 
+        #Aggiungi i tuoi suggerimenti qui 
+        st.write("- Suggerimento 1") 
+        st.write("- Suggerimento 2") 
+        st.write("- Suggerimento 3")
+
+def fill_questionnaire(): 
+    st.markdown("### Compila il questionario")
+    gender = st.radio("Gender", ("Male", "Female"))
+    age = st.number_input("Age", min_value=1, max_value=100, step=1)
+    accademic_pressure = st.slider("Accademic Pressure", min_value=1, max_value=5, step=1)
+    cgpa = st.number_input("CGPA", min_value=1.00, max_value=10.00, step=0.01)
+    study_satisfaction = st.slider("Study satisfaction", min_value=1, max_value=5, step=1)
+    sleep_duration = st.selectbox(
+        "How much do you sleep?",
+        ["5-6 hours", "Less than 5 hours", "7-8 hours", "More than 8 hours", "Others"]
+    )
+    dietary_habits = st.selectbox(
+        "dietary habits",
+        ["Healty", "Moderate", "Unhealty"]
+    )
+    degree = st.selectbox(
+        "degree",
+        ["Diploma", "Bachelor", "Master", "PhD"]
+    )
+    suicidal_thoughts = st.radio("Suicidal", ("Yes", "No"))
+    study_hours = st.slider("Quante ore studi al giorno?", min_value=0, max_value=10, step=1)
+    financial_stress = st.slider("Financial stress", min_value=0, max_value=5, step=1)
+    family_history = st.radio("Fam History", ("Yes", "No"))
+
+    if st.button("Invia risposta"): 
+        if add_response(st.session_state.user_id, gender, age, accademic_pressure, cgpa, study_satisfaction, sleep_duration, dietary_habits, degree, suicidal_thoughts,
+                        study_hours, financial_stress, family_history): 
+            st.success("Risposta inviata con successo!") 
+        else: st.error("Si è verificato un errore durante l'invio della risposta.")
+    st.write("Risposte al questionario:") 
+    responses = get_responses(st.session_state.user_id) 
+    for res in responses: 
+        st.write(res)
+
+

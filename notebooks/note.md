@@ -53,3 +53,24 @@ Domanda: quante settimane di lavoro?
 
 ## LINK UTILI
 https://github.com/mkhorasani/Streamlit-Authenticator
+
+
+### struttura home page 
+home: 
+- statistiche
+barra laterale con: 
+- statistiche (home page)
+- nuovo questionario 
+- suggerimenti 
+
+# Come gestire il database: brainstorming
+- Logs? 
+- Tabella dei questionari e basta? 
+- Come gestire i nuovi questionari? 
+
+Decisione: 
+- tabella con questionari, ogni risposta al questionario ha associato
+    - id utente che ha risposto 
+    - orario 
+- per le statische si usano tutti i questionari fatti dall'utente 
+- per i suggerimenti si usa solo l'ultimo questionario compilato 
