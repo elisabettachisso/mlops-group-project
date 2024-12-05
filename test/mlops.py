@@ -33,16 +33,16 @@ def preprocess_data(gender, age, academic_pressure, cgpa, study_satisfaction, sl
     processed_data = {
         "Gender": [gender_mapping.get(gender, -1)],  # Default: -1 per valori sconosciuti
         "Age": [age],
-        "Academic_Pressure": [academic_pressure],
+        "Academic Pressure": [academic_pressure],
         "CGPA": [cgpa],
-        "Study_Satisfaction": [study_satisfaction],
-        "Sleep_Duration": [sleep_duration_mapping.get(sleep_duration, 0)],  # Codifica aggiornata
-        "Dietary_Habits": [dietary_habits_mapping.get(dietary_habits, -1)],
+        "Study Satisfaction": [study_satisfaction],
+        "Sleep Duration": [sleep_duration_mapping.get(sleep_duration, 0)],  # Codifica aggiornata
+        "Dietary Habits": [dietary_habits_mapping.get(dietary_habits, -1)],
         "Degree": [degree_mapping.get(degree, -1)],
-        "Suicidal_Thoughts": [suicidal_thoughts_mapping.get(suicidal_thoughts, -1)],
-        "Study_Hours": [study_hours],
-        "Financial_Stress": [financial_stress],
-        "Family_History": [family_history_mapping.get(family_history, -1)]
+        "Have you ever had suicidal thoughts ?": [suicidal_thoughts_mapping.get(suicidal_thoughts, -1)],
+        "Work/Study Hours": [study_hours],
+        "Financial Stress": [financial_stress],
+        "Family History of Mental Illness": [family_history_mapping.get(family_history, -1)]
     }
 
     # Converte in DataFrame
