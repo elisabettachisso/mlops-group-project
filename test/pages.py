@@ -2,7 +2,7 @@ import streamlit as st
 from database import initialize_database, add_response, get_responses
 from route import go_to_login, go_to_register, logout
 from mlops import calculate_risk
-
+import plotly.graph_objects as go
 initialize_database()
 
 def home_page():
@@ -50,7 +50,7 @@ def main_page():
         "- [Esercizi di mindfulness](https://www.headspace.com)\n"
         "- [Tecniche di gestione dello stress](https://www.helpguide.org/articles/stress/stress-management.htm)"
     )
-
+    
     # Footer
     st.markdown("---")
     st.write("© 2024 MindHug. Tutti i diritti riservati.")
@@ -67,6 +67,7 @@ def display_statistics():
         # Aggiungi qui le tue statistiche, per esempio: 
             total_responses = len(responses) 
             st.write(f"Numero totale di risposte: {total_responses}") 
+            
         # Altre statistiche possono essere aggiunte qui 
         else: 
             st.write("Non ci sono risposte al questionario ancora.")
@@ -111,10 +112,24 @@ def fill_questionnaire():
             st.error("Si è verificato un errore durante l'invio della risposta.")
     # Calcolo del rischio
     risk_percentage = calculate_risk(gender, age, accademic_pressure, cgpa, study_satisfaction, sleep_duration, dietary_habits, degree, suicidal_thoughts, study_hours, financial_stress, family_history)
-    st.write(f"Il tuo rischio stimato di depressione è: {risk_percentage}%") 
-    responses = get_responses(st.session_state.user_id) 
     
-    for res in responses: 
-        st.write(res)
+    barra_colore = "green" if risk_percentage < 50 else "red"
+    fig = go.Figure(go.Indicator( 
+        mode = "gauge+number", 
+        value = risk_percentage, 
+        title = {'text': "Il tuo rischio stimato di depressione è:"},
+        number = {'suffix': "%"}, 
+        gauge = { 
+            'axis': {'range': [0, 100]}, 
+            'bar': {'color': barra_colore}, 
+            'steps': [ {'range': [0, 100], 'color': "lightgray"}
+            ]}
+    ))
+    st.plotly_chart(fig)
+    
+    #responses = get_responses(st.session_state.user_id) 
+    
+    #for res in responses: 
+      #  st.write(res)
 
 
