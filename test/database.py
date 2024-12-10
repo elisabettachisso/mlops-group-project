@@ -98,3 +98,13 @@ def get_responses(user_id):
     responses = c.fetchall()
     conn.close()
     return responses
+
+def get_last_response(user_id):
+    conn = sqlite3.connect('db/mindhug.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM surveys WHERE user_id = ? order by id desc LIMIT 1', (user_id,))
+    last_response = c.fetchall()
+    conn.close()
+    return last_response
+
+
