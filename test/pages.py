@@ -1,8 +1,10 @@
 import streamlit as st
 from database import initialize_database, add_response, get_responses
 from route import go_to_login, go_to_register, logout
-from mlops import calculate_risk
+from ml_utils import calculate_risk
 import plotly.graph_objects as go
+import matplotlib.pyplot as plt
+import pandas as pd
 initialize_database()
 
 def home_page():
@@ -37,7 +39,8 @@ def main_page():
         selection = st.radio("Navigazione", ["Home", "Suggerimenti", "Compila Questionario"])
 
     if selection == "Home": 
-        display_statistics() 
+        display_statistics()
+        plot_sleep_duration(st.session_state.user_id) 
     elif selection == "Suggerimenti": 
         display_suggestions() 
     elif selection == "Compila Questionario": 
@@ -131,5 +134,51 @@ def fill_questionnaire():
     
     #for res in responses: 
       #  st.write(res)
+
+
+
+def plot_sleep_duration(user_id):
+    # Recupera le risposte dell'utente
+    responses = get_responses(user_id)
+    
+    if responses:
+        # Converte le risposte in un DataFrame
+        columns = [
+            "id", "user_id", "gender", "age", "academic_pressure", "cgpa",
+            "study_satisfaction", "sleep_duration", "dietary_habits", "degree",
+            "suicidal_thoughts", "study_hours", "financial_stress",
+            "family_history", "timestamp"
+        ]
+        df = pd.DataFrame(responses, columns=columns)
+
+        # Prepara i dati per il grafico
+        sleep_duration_mapping = {
+            '5-6 hours': 5.5,
+            'Less than 5 hours': 4.5,
+            '7-8 hours': 7.5,
+            'More than 8 hours': 8.5,
+            'Others': None
+        }
+        df['sleep_duration_numeric'] = df['sleep_duration'].map(sleep_duration_mapping)
+        df['timestamp'] = pd.to_datetime(df['timestamp'])
+
+        # Rimuove valori non validi
+        df = df.dropna(subset=['sleep_duration_numeric'])
+
+        # Ordina per timestamp
+        df = df.sort_values(by='timestamp')
+
+        # Grafico
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.plot(df['timestamp'], df['sleep_duration_numeric'], marker='o', linestyle='-')
+        ax.set_title("Andamento delle ore di sonno nel tempo", fontsize=16)
+        ax.set_xlabel("Data", fontsize=14)
+        ax.set_ylabel("Ore di sonno", fontsize=14)
+        ax.grid(True)
+        
+        # Mostra il grafico su Streamlit
+        st.pyplot(fig)
+    else:
+        st.write("Non ci sono risposte disponibili per questo utente.")
 
 
