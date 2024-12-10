@@ -1,5 +1,5 @@
 import streamlit as st
-from database import initialize_database, add_response, get_responses
+from database import initialize_database, add_response, get_responses, get_last_response
 from route import go_to_login, go_to_register, logout
 from ml_utils import calculate_risk
 import plotly.graph_objects as go
@@ -65,23 +65,39 @@ def main_page():
 def display_statistics(): 
         st.header("Statistiche") 
         responses = get_responses(st.session_state.user_id)
+        last_response = get_last_response(st.session_state.user_id)
         if responses: 
-            st.write("Ecco alcune statistiche dalle risposte al questionario:") 
         # Aggiungi qui le tue statistiche, per esempio: 
             total_responses = len(responses) 
             st.write(f"Numero totale di risposte: {total_responses}") 
-            
         # Altre statistiche possono essere aggiunte qui 
         else: 
             st.write("Non ci sono risposte al questionario ancora.")
+        if last_response:
+            risk_percentage = calculate_risk(last_response[0][2], last_response[0][3], last_response[0][4], last_response[0][5], last_response[0][6], last_response[0][7], last_response[0][8], last_response[0][9], last_response[0][10], last_response[0][11], last_response[0][12], last_response[0][13])
+            barra_colore = "green" if risk_percentage < 50 else "red"
+            fig = go.Figure(go.Indicator( 
+                   mode = "gauge+number", 
+                    value = risk_percentage, 
+                    title = {'text': "Il tuo rischio stimato di depressione rispetto al tuo ultimo questionario compilato è:"},
+                    number = {'suffix': "%"}, 
+                    gauge = { 
+                        'axis': {'range': [0, 100]}, 
+                        'bar': {'color': barra_colore}, 
+                        'steps': [ {'range': [0, 100], 'color': "lightgray"}
+                      ]}
+            ))
+            st.plotly_chart(fig)
+        else:
+            st.write("Non è ancora stato compilato alcun questionario")
+            
+        
 
 def display_suggestions(): 
         st.header("Suggerimenti") 
         st.write("Ecco alcuni suggerimenti utili:") 
-        #Aggiungi i tuoi suggerimenti qui 
-        st.write("- Suggerimento 1") 
-        st.write("- Suggerimento 2") 
-        st.write("- Suggerimento 3")
+        last_response = get_last_response(st.session_state.user_id)
+
 
 def fill_questionnaire(): 
     st.markdown("### Compila il questionario")
