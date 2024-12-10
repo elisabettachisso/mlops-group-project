@@ -5,6 +5,7 @@ from ml_utils import calculate_risk
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 initialize_database()
 
 def home_page():
@@ -90,6 +91,7 @@ def display_statistics():
             st.plotly_chart(fig)
         else:
             st.write("Non è ancora stato compilato alcun questionario")
+        
             
         
 
@@ -152,7 +154,6 @@ def fill_questionnaire():
       #  st.write(res)
 
 
-
 def plot_sleep_duration(user_id):
     # Recupera le risposte dell'utente
     responses = get_responses(user_id)
@@ -184,17 +185,13 @@ def plot_sleep_duration(user_id):
         # Ordina per timestamp
         df = df.sort_values(by='timestamp')
 
-        # Grafico
-        fig, ax = plt.subplots(figsize=(10, 6))
-        ax.plot(df['timestamp'], df['sleep_duration_numeric'], marker='o', linestyle='-')
-        ax.set_title("Andamento delle ore di sonno nel tempo", fontsize=16)
-        ax.set_xlabel("Data", fontsize=14)
-        ax.set_ylabel("Ore di sonno", fontsize=14)
-        ax.grid(True)
-        
-        # Mostra il grafico su Streamlit
-        st.pyplot(fig)
+        # Creazione del grafico area chart
+        st.line_chart(data=df, x='Timestamp', y='Sleep duration')
+
     else:
         st.write("Non ci sono risposte disponibili per questo utente.")
+
+        # Esempio di utilizzo della funzione
+    user_id = 123  # Esempio di ID utente
 
 
