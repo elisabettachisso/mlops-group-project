@@ -6,6 +6,7 @@ import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+from plots import plot_risk_indicator, plot_sleep_duration, plot_academic_pressure
 initialize_database()
 
 def home_page():
@@ -41,7 +42,6 @@ def main_page():
 
     if selection == "Home": 
         display_statistics()
-        plot_sleep_duration(st.session_state.user_id) 
     elif selection == "Suggerimenti": 
         display_suggestions() 
     elif selection == "Compila Questionario": 
@@ -75,22 +75,17 @@ def display_statistics():
         else: 
             st.write("Non ci sono risposte al questionario ancora.")
         if last_response:
-            risk_percentage = calculate_risk(last_response[0][2], last_response[0][3], last_response[0][4], last_response[0][5], last_response[0][6], last_response[0][7], last_response[0][8], last_response[0][9], last_response[0][10], last_response[0][11], last_response[0][12], last_response[0][13])
-            barra_colore = "green" if risk_percentage < 50 else "red"
-            fig = go.Figure(go.Indicator( 
-                   mode = "gauge+number", 
-                    value = risk_percentage, 
-                    title = {'text': "Il tuo rischio stimato di depressione rispetto al tuo ultimo questionario compilato è:"},
-                    number = {'suffix': "%"}, 
-                    gauge = { 
-                        'axis': {'range': [0, 100]}, 
-                        'bar': {'color': barra_colore}, 
-                        'steps': [ {'range': [0, 100], 'color': "lightgray"}
-                      ]}
-            ))
-            st.plotly_chart(fig)
+            risk_percentage = calculate_risk(
+                last_response[0][2], last_response[0][3], last_response[0][4],
+                last_response[0][5], last_response[0][6], last_response[0][7],
+                last_response[0][8], last_response[0][9], last_response[0][10],
+                last_response[0][11], last_response[0][12], last_response[0][13]
+            )
+            plot_risk_indicator(risk_percentage)
         else:
             st.write("Non è ancora stato compilato alcun questionario")
+        plot_sleep_duration(st.session_state.user_id)
+        plot_academic_pressure(st.session_state.user_id)
         
             
         
@@ -133,20 +128,8 @@ def fill_questionnaire():
             st.error("Si è verificato un errore durante l'invio della risposta.")
     # Calcolo del rischio
     risk_percentage = calculate_risk(gender, age, accademic_pressure, cgpa, study_satisfaction, sleep_duration, dietary_habits, degree, suicidal_thoughts, study_hours, financial_stress, family_history)
-    
-    barra_colore = "green" if risk_percentage < 50 else "red"
-    fig = go.Figure(go.Indicator( 
-        mode = "gauge+number", 
-        value = risk_percentage, 
-        title = {'text': "Il tuo rischio stimato di depressione è:"},
-        number = {'suffix': "%"}, 
-        gauge = { 
-            'axis': {'range': [0, 100]}, 
-            'bar': {'color': barra_colore}, 
-            'steps': [ {'range': [0, 100], 'color': "lightgray"}
-            ]}
-    ))
-    st.plotly_chart(fig)
+
+    plot_risk_indicator(risk_percentage)
     
     #responses = get_responses(st.session_state.user_id) 
     
@@ -154,44 +137,6 @@ def fill_questionnaire():
       #  st.write(res)
 
 
-def plot_sleep_duration(user_id):
-    # Recupera le risposte dell'utente
-    responses = get_responses(user_id)
-    
-    if responses:
-        # Converte le risposte in un DataFrame
-        columns = [
-            "id", "user_id", "gender", "age", "academic_pressure", "cgpa",
-            "study_satisfaction", "sleep_duration", "dietary_habits", "degree",
-            "suicidal_thoughts", "study_hours", "financial_stress",
-            "family_history", "timestamp"
-        ]
-        df = pd.DataFrame(responses, columns=columns)
 
-        # Prepara i dati per il grafico
-        sleep_duration_mapping = {
-            '5-6 hours': 5.5,
-            'Less than 5 hours': 4.5,
-            '7-8 hours': 7.5,
-            'More than 8 hours': 8.5,
-            'Others': None
-        }
-        df['sleep_duration_numeric'] = df['sleep_duration'].map(sleep_duration_mapping)
-        df['timestamp'] = pd.to_datetime(df['timestamp'])
-
-        # Rimuove valori non validi
-        df = df.dropna(subset=['sleep_duration_numeric'])
-
-        # Ordina per timestamp
-        df = df.sort_values(by='timestamp')
-
-        # Creazione del grafico area chart
-        st.line_chart(data=df, x='Timestamp', y='Sleep duration')
-
-    else:
-        st.write("Non ci sono risposte disponibili per questo utente.")
-
-        # Esempio di utilizzo della funzione
-    user_id = 123  # Esempio di ID utente
 
 
