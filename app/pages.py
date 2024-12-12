@@ -29,7 +29,7 @@ def home_page():
 
 def main_page():
   
-  st.set_page_config(
+    st.set_page_config(
         page_title="Mindhug",
         page_icon="🧠",
         layout="wide",
@@ -172,6 +172,8 @@ def centered_container(content):
     )
     st.markdown('<div class="centered-container">', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
+
+
 
 
 
