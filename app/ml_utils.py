@@ -81,3 +81,4 @@ def calculate_risk(gender, age, academic_pressure, cgpa, study_satisfaction, sle
     risk_percentage = round(risk_probability * 100, 2)  # Converti in percentuale e arrotonda
     
     return risk_percentage
+
