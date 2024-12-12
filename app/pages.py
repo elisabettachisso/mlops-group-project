@@ -1,5 +1,5 @@
 import streamlit as st
-from database import initialize_database, add_response, get_responses, get_last_response
+from database import initialize_database, add_categories, add_response, get_responses, get_last_response, add_suggestions
 from route import go_to_login, go_to_register
 from ml_utils import calculate_risk
 import plotly.graph_objects as go
@@ -55,7 +55,7 @@ def main_page():
     if selection == "Home":
             # Definisci il titolo e il logo
         title = "MindHug"
-        logo_path = "app/images/logomindhug.png"  # Sostituisci con il percorso del tuo logo
+        logo_path = "images/logomindhug.png"  # Sostituisci con il percorso del tuo logo
 
     # Usa st.columns per posizionare il logo e il titolo accanto
         col1, col2 = st.columns([1, 5])  # Colonna per il logo e colonna per il titolo
@@ -111,6 +111,18 @@ def display_suggestions():
         st.header("Tips") 
         st.write("Here are some helpful tips:") 
         last_response = get_last_response(st.session_state.user_id)
+        if st.button("Aggiungi Suggestions"):
+            try:
+                add_suggestions()
+                st.success("Suggestions added successfully!")
+            except Exception as e:
+                st.error(f"An error occurred while adding suggestions: {e}")
+        if st.button("Aggiungi Categorie"):
+            try:
+                add_categories()
+                st.success("categories added successfully!")
+            except Exception as e:
+                st.error(f"An error occurred while adding suggestions: {e}")
         st.markdown("### Useful Resources")
         st.write(
         "- [Mindfulness Exercises](https://www.headspace.com)\n"
