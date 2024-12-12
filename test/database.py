@@ -27,6 +27,23 @@ def initialize_database():
               timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
               FOREIGN KEY (user_id) 
               REFERENCES users(id)) ''')
+    c.execute(''' CREATE TABLE IF NOT EXISTS categories 
+              (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+              category TEXT) ''')
+    c.execute('''CREATE TABLE IF NOT EXISTS suggestions (
+              id INTEGER PRIMARY KEY AUTOINCREMENT, 
+              title TEXT, 
+              description TEXT,
+              category_id INTEGER,
+              level INTEGER,
+              FOREIGN KEY (category_id) REFERENCES categories(id))''')
+    c.execute('''CREATE TABLE IF NOT EXISTS suggestions (
+               id INTEGER PRIMARY KEY AUTOINCREMENT, 
+               title TEXT, 
+               description TEXT,
+               category_id INTEGER,
+               FOREIGN KEY (category_id) REFERENCES categories(id))''')
+           
     conn.commit()
 
 def add_user(username, name, email, password):
