@@ -55,7 +55,7 @@ def main_page():
     if selection == "Home":
             # Definisci il titolo e il logo
         title = "MindHug"
-        logo_path = "images/logomindhug.png"  # Sostituisci con il percorso del tuo logo
+        logo_path = "app/images/logomindhug.png"  # Sostituisci con il percorso del tuo logo
 
     # Usa st.columns per posizionare il logo e il titolo accanto
         col1, col2 = st.columns([1, 5])  # Colonna per il logo e colonna per il titolo
@@ -184,6 +184,8 @@ def centered_container(content):
     )
     st.markdown('<div class="centered-container">', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
+
+
 
 
 
