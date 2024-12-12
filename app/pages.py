@@ -1,6 +1,6 @@
 import streamlit as st
 import sqlite3
-from database import initialize_database, add_categories, add_response, get_responses, get_last_response, add_suggestions
+from database import initialize_database, add_categories, add_response, get_responses, get_last_response
 from route import go_to_login, go_to_register
 from ml_utils import calculate_risk
 import plotly.graph_objects as go
