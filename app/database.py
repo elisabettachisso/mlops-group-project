@@ -1,7 +1,7 @@
 import sqlite3 
 
 def initialize_database(): 
-    conn = sqlite3.connect('db/mindhug.db') 
+    conn = sqlite3.connect('mindhug.db') 
     cursor = conn.cursor() 
     cursor.execute(''' CREATE TABLE IF NOT EXISTS users 
               (id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -48,7 +48,7 @@ def initialize_database():
 
 
 def get_users():
-    conn = sqlite3.connect('db/mindhug.db')
+    conn = sqlite3.connect('mindhug.db')
     c = conn.cursor()
     c.execute('SELECT * FROM users')
     users = c.fetchall()
@@ -56,7 +56,7 @@ def get_users():
     return users
 
 def add_user(username, name, email, password):
-    conn = sqlite3.connect('db/mindhug.db')
+    conn = sqlite3.connect('mindhug.db')
     c = conn.cursor()
     try:
         c.execute('INSERT INTO users (username, name, email, password) VALUES (?, ?, ?, ?)', 
@@ -71,7 +71,7 @@ def add_user(username, name, email, password):
 #inserisce una riga nel db
 
 def verify_user(username, password):
-    conn = sqlite3.connect('db/mindhug.db')
+    conn = sqlite3.connect('mindhug.db')
     c = conn.cursor()
     c.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password))
     user = c.fetchone()
@@ -81,7 +81,7 @@ def verify_user(username, password):
 
 def add_response(user_id, gender, age, accademic_pressure, cgpa, study_satisfaction, sleep_duration, dietary_habits, degree, suicidal_thoughts,
                         study_hours, financial_stress, family_history):
-    conn = sqlite3.connect('db/mindhug.db')
+    conn = sqlite3.connect('mindhug.db')
     c = conn.cursor()
     try:
         c.execute(''' INSERT INTO surveys 
@@ -97,7 +97,7 @@ def add_response(user_id, gender, age, accademic_pressure, cgpa, study_satisfact
     return True
 
 def get_responses(user_id):
-    conn = sqlite3.connect('db/mindhug.db')
+    conn = sqlite3.connect('mindhug.db')
     c = conn.cursor()
     c.execute('SELECT * FROM surveys WHERE user_id = ?', (user_id,))
     responses = c.fetchall()
@@ -105,7 +105,7 @@ def get_responses(user_id):
     return responses
 
 def get_last_response(user_id):
-    conn = sqlite3.connect('db/mindhug.db')
+    conn = sqlite3.connect('mindhug.db')
     c = conn.cursor()
     c.execute('SELECT * FROM surveys WHERE user_id = ? order by id desc LIMIT 1', (user_id,))
     last_response = c.fetchall()
