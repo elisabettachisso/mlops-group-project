@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from plots import plot_risk_indicator, plot_sleep_duration, plot_academic_pressure
+from plots import plot_risk_indicator, statistic_plots
 initialize_database()
 
 def home_page():
@@ -28,13 +28,30 @@ def main_page():
     )
 
     # Intestazione
-    st.title("🧠 MindHug")
+
+
+# Definisci il titolo e il logo
+    title = "MindHug"
+    logo_path = "images/logomindhug.png"  # Sostituisci con il percorso del tuo logo
+
+# Usa st.columns per posizionare il logo e il titolo accanto
+    col1, col2 = st.columns([1, 5])  # Colonna per il logo e colonna per il titolo
+
+    with col1:
+        # Mostra il logo nella prima colonna
+        st.image(logo_path, width=200)  # Imposta la larghezza del logo
+
+    with col2:
+        # Mostra il titolo nella seconda colonna
+        st.markdown(f"<h1>{title}</h1>", unsafe_allow_html=True)
+
+    #st.title("🧠 MindHug")
     st.subheader("Il tuo supporto per il benessere mentale")
     st.write(
         "Benvenuto in **MindHug**, un'app progettata per aiutarti a monitorare il tuo benessere mentale "
         "e fornire suggerimenti personalizzati per prenderti cura di te stesso."
     )
-    st.image("images/logomindhug.png", width=200)  
+    #st.image("images/logomindhug.png", width=200)  
 
     # Barra laterale per navigare 
     with st.sidebar: 
@@ -67,13 +84,6 @@ def display_statistics():
         st.header("Statistiche") 
         responses = get_responses(st.session_state.user_id)
         last_response = get_last_response(st.session_state.user_id)
-        if responses: 
-        # Aggiungi qui le tue statistiche, per esempio: 
-            total_responses = len(responses) 
-            st.write(f"Numero totale di risposte: {total_responses}") 
-        # Altre statistiche possono essere aggiunte qui 
-        else: 
-            st.write("Non ci sono risposte al questionario ancora.")
         if last_response:
             risk_percentage = calculate_risk(
                 last_response[0][2], last_response[0][3], last_response[0][4],
@@ -84,11 +94,7 @@ def display_statistics():
             plot_risk_indicator(risk_percentage)
         else:
             st.write("Non è ancora stato compilato alcun questionario")
-        plot_sleep_duration(st.session_state.user_id)
-        plot_academic_pressure(st.session_state.user_id)
-        
-            
-        
+        statistic_plots(st.session_state.user_id)
 
 def display_suggestions(): 
         st.header("Suggerimenti") 
