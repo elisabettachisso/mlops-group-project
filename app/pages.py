@@ -28,7 +28,7 @@ def main_page():
     )
 
     title = "MindHug"
-    logo_path = "images/logomindhug.png"  
+    logo_path = "logomindhug.png"  
 
     col1, col2 = st.columns([1, 5])  
 
