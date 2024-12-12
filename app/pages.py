@@ -28,8 +28,8 @@ def home_page():
         st.button("Go to Registration", on_click=go_to_register)
 
 def main_page():
-
-    st.set_page_config(
+  
+  st.set_page_config(
         page_title="Mindhug",
         page_icon="🧠",
         layout="wide",
@@ -80,8 +80,6 @@ def main_page():
         display_suggestions() 
     elif selection == "Fill Questionnaire": 
         fill_questionnaire()
-    # Sezione di input
-
     
     if st.button("Logout"):
         logout()
