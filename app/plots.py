@@ -30,6 +30,28 @@ def plot_risk_indicator(risk_percentage):
     # Visualizza il grafico
     return fig_risk
 
+def plot_avarage_indicator(risk_percentage):
+
+
+    # Determina il colore della barra
+    barra_colore = "green" if risk_percentage < 50 else "red"
+
+    # Crea il grafico a gauge
+    fig_risk_avarage = go.Figure(go.Indicator(
+        mode="gauge+number",
+        value=risk_percentage,
+        title={'text': "On average, based on all the questionnaires you have completed, your risk of depression is:"},
+        number={'suffix': "%"},
+        gauge={
+            'axis': {'range': [0, 100]},
+            'bar': {'color': barra_colore},
+            'steps': [
+                {'range': [0, 100], 'color': "lightgray"}
+            ]
+        }
+    ))
+    return fig_risk_avarage
+
 
 def plots(user_id, risk_percentage):
 
@@ -152,7 +174,7 @@ def plots(user_id, risk_percentage):
             labels={'timestamp': "Time", 'sleep_duration_numeric': "Durata del Sonno (ore)"},
         )
 
-        st.plotly_chart(plot_risk_indicator(risk_percentage))  
+        st.plotly_chart(plot_avarage_indicator(risk_percentage))  
             
         col2, col3, col4 = st.columns(3)
 
@@ -223,6 +245,7 @@ def plot_dietary_habits(user_id):
             # Mostra il grafico con Streamlit
         else:
             st.write("⚠️ Nessun dato valido per Abitudini Alimentari.") 
+
 
 
 def statistic_plots(user_id, risk_percentage):
