@@ -12,14 +12,7 @@ if "page" not in st.session_state:
     st.session_state.page = "home"
 
 def main():
-        # Configurazione della pagina
-    st.set_page_config(
-        page_title="MindHug",
-        page_icon="🧠",
-        layout="centered",
-        initial_sidebar_state="collapsed"
-    )
-    
+
     if check_session():
         main_page()
     else:
@@ -32,7 +25,8 @@ def main():
         elif st.session_state.page == "register":
             registration()
         elif logout():
-            st.session_state.page == "home"
+            st.session_state.page = "home"
+            home_page()
             st.rerun
 
         

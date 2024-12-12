@@ -13,10 +13,10 @@ def plot_risk_indicator(risk_percentage):
     barra_colore = "green" if risk_percentage < 50 else "red"
 
     # Crea il grafico a gauge
-    fig = go.Figure(go.Indicator(
+    fig_risk = go.Figure(go.Indicator(
         mode="gauge+number",
         value=risk_percentage,
-        title={'text': "Il tuo rischio stimato di depressione rispetto al tuo ultimo questionario compilato è:"},
+        title={'text': "Your estimated risk of depression based on your last completed questionnaire is:"},
         number={'suffix': "%"},
         gauge={
             'axis': {'range': [0, 100]},
@@ -28,73 +28,11 @@ def plot_risk_indicator(risk_percentage):
     ))
 
     # Visualizza il grafico
-    st.plotly_chart(fig)
+    return fig_risk
 
 
-def plot_sleep_duration(user_id):
-    """
-    Visualizza un grafico della durata del sonno (sleep_duration) per un utente specifico.
+def plots(user_id, risk_percentage):
 
-    Parameters:
-        user_id (int): ID dell'utente.
-
-    Returns:
-        None
-    """
-    # Recupera le risposte dell'utente
-    responses = get_responses(user_id)
-
-    if responses:
-        # Converte le risposte in un DataFrame
-        columns = [
-            "id", "user_id", "gender", "age", "academic_pressure", "cgpa",
-            "study_satisfaction", "sleep_duration", "dietary_habits", "degree",
-            "suicidal_thoughts", "study_hours", "financial_stress",
-            "family_history", "timestamp"
-        ]
-        df = pd.DataFrame(responses, columns=columns)
-
-        # Prepara i dati per la durata del sonno
-        sleep_duration_mapping = {
-            '5-6 hours': 5.5,
-            'Less than 5 hours': 4.5,
-            '7-8 hours': 7.5,
-            'More than 8 hours': 8.5,
-            'Others': None
-        }
-        df['sleep_duration_numeric'] = df['sleep_duration'].map(sleep_duration_mapping)
-        df['timestamp'] = pd.to_datetime(df['timestamp'])
-
-        # Rimuove valori non validi
-        df = df.dropna(subset=['sleep_duration_numeric'])
-
-        # Ordina per timestamp
-        df = df.sort_values(by='timestamp')
-
-        # Creazione del grafico per "sleep_duration"
-        fig_sleep = px.line(
-            df,
-            x='timestamp',
-            y='sleep_duration_numeric',
-            title="Andamento della Durata del Sonno",
-            labels={'timestamp': "Time", 'sleep_duration_numeric': "Durata del Sonno (ore)"},
-        )
-        st.plotly_chart(fig_sleep)
-
-
-
-
-
-def plots(user_id):
-    """
-    Visualizza un grafico delle pressioni accademiche (academic pressure) per un utente specifico.
-
-    Parameters:
-        user_id (int): ID dell'utente.
-
-    Returns:
-        None
-    """
     # Recupera le risposte dell'utente
     responses = get_responses(user_id)
     if responses:
@@ -126,59 +64,124 @@ def plots(user_id):
             df,
             x='timestamp',
             y='academic_pressure',
-            title="Andamento della Pressione Accademica",
+            title="Academic Pressure",
             labels={'timestamp': "Time", 'academic_pressure': "Academic Pressure"}
         )
-        st.plotly_chart(fig_academic)
 
         # Creazione del grafico per "cgpa"
         fig_cgpa = px.line(
             df,
             x='timestamp',
             y='cgpa',
-            title="Andamento del CGPA",
+            title="CGPA",
             labels={'timestamp': "Time", 'cgpa': "CGPA"}
         )
-        st.plotly_chart(fig_cgpa)
 
-        fig_academic = px.line(
+        fig_study_satisfaction = px.line(
             df,
             x='timestamp',
             y='study_satisfaction',
-            title="Soddisfazione studio",
+            title="Study satisfaction",
             labels={'timestamp': "Time", 'study_satisfaction': "Soddisfazione studio"}
         )
-        st.plotly_chart(fig_academic)
 
 
-        fig_academic = px.line(
+        fig_study_hours = px.line(
             df,
             x='timestamp',
             y='study_hours',
-            title="Ore di studio",
+            title="Study hours",
             labels={'timestamp': "Time", 'study_hours': "Ore di studio"}
         )
-        st.plotly_chart(fig_academic)
 
-        fig_academic = px.line(
+
+        fig_finantial_stress = px.line(
             df,
             x='timestamp',
             y='financial_stress',
             title="Finantial stress",
             labels={'timestamp': "Time", 'financial_stress': "Finantial stress"}
         )
-        st.plotly_chart(fig_academic)
+
+        if df['dietary_habits'].notna().sum() > 0:
+            dietary_counts = df['dietary_habits'].value_counts()
+
+            # Crea il grafico a torta
+            fig_dietary_habits = go.Figure(
+                data=[go.Pie(
+                    labels=dietary_counts.index,
+                    values=dietary_counts.values,
+                    hole=0.3  # Aggiungi il foro al centro per un grafico a ciambella
+                )]
+            )
+            fig_dietary_habits.update_layout(
+                title_text="Dietary habits",
+                annotations=[
+                    dict(
+                        text="Dietary Habits",
+                        x=0.5,
+                        y=0.5,
+                        font_size=20,
+                        showarrow=False
+                    )
+                ]
+            )
+
+        sleep_duration_mapping = {
+            '5-6 hours': 5.5,
+            'Less than 5 hours': 4.5,
+            '7-8 hours': 7.5,
+            'More than 8 hours': 8.5,
+            'Others': None
+        }
+        df['sleep_duration_numeric'] = df['sleep_duration'].map(sleep_duration_mapping)
+        df['timestamp'] = pd.to_datetime(df['timestamp'])
+
+        # Rimuove valori non validi
+        df = df.dropna(subset=['sleep_duration_numeric'])
+
+        # Ordina per timestamp
+        df = df.sort_values(by='timestamp')
+
+        # Creazione del grafico per "sleep_duration"
+        fig_sleep = px.line(
+            df,
+            x='timestamp',
+            y='sleep_duration_numeric',
+            title="Sleep Duration",
+            labels={'timestamp': "Time", 'sleep_duration_numeric': "Durata del Sonno (ore)"},
+        )
+
+        st.plotly_chart(plot_risk_indicator(risk_percentage))  
+            
+        col2, col3, col4 = st.columns(3)
+
+        with col2:
+            st.plotly_chart(fig_academic)
+
+        with col3:
+            st.plotly_chart(fig_study_satisfaction)
+
+        with col4:
+            st.plotly_chart(fig_cgpa, use_container_width=True)
+        
+        col5, col6, col7 = st.columns(3)
+
+        with col5:
+            st.plotly_chart(fig_study_hours, use_container_width=True)
+
+        with col6:
+            st.plotly_chart(fig_finantial_stress, use_container_width=True)
+
+        with col7:
+            st.plotly_chart(fig_sleep, use_container_width=True)
+        
+
+
+
 
 def plot_dietary_habits(user_id):
-    """
-    Visualizza un grafico a torta delle abitudini alimentari per un utente specifico.
 
-    Parameters:
-        user_id (int): ID dell'utente.
-
-    Returns:
-        None
-    """
     # Recupera le risposte dell'utente
     responses = get_responses(user_id)
 
@@ -197,14 +200,14 @@ def plot_dietary_habits(user_id):
             dietary_counts = df['dietary_habits'].value_counts()
 
             # Crea il grafico a torta
-            fig = go.Figure(
+            fig_dietary_habits = go.Figure(
                 data=[go.Pie(
                     labels=dietary_counts.index,
                     values=dietary_counts.values,
                     hole=0.3  # Aggiungi il foro al centro per un grafico a ciambella
                 )]
             )
-            fig.update_layout(
+            fig_dietary_habits.update_layout(
                 title_text="Distribuzione delle Abitudini Alimentari",
                 annotations=[
                     dict(
@@ -218,12 +221,9 @@ def plot_dietary_habits(user_id):
             )
 
             # Mostra il grafico con Streamlit
-            st.plotly_chart(fig)
         else:
             st.write("⚠️ Nessun dato valido per Abitudini Alimentari.") 
 
 
-def statistic_plots(user_id):
-    plot_sleep_duration(user_id)
-    plots(user_id)
-    plot_dietary_habits(user_id)
+def statistic_plots(user_id, risk_percentage):
+    plots(user_id, risk_percentage)
