@@ -2,14 +2,14 @@ import sqlite3
 
 def initialize_database(): 
     conn = sqlite3.connect('db/mindhug.db') 
-    cursor = conn.cursor() 
-    cursor.execute(''' CREATE TABLE IF NOT EXISTS users 
+    c = conn.cursor() 
+    c.execute(''' CREATE TABLE IF NOT EXISTS users 
               (id INTEGER PRIMARY KEY AUTOINCREMENT, 
               username TEXT UNIQUE, 
               name TEXT, 
               email TEXT, 
               password TEXT) ''') 
-    cursor.execute(''' CREATE TABLE IF NOT EXISTS surveys
+    c.execute(''' CREATE TABLE IF NOT EXISTS surveys
               (id INTEGER PRIMARY KEY AUTOINCREMENT, 
               user_id INTEGER, 
               gender TEXT, 
@@ -27,17 +27,17 @@ def initialize_database():
               timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
               FOREIGN KEY (user_id) 
               REFERENCES users(id)) ''')
-    cursor.execute(''' CREATE TABLE IF NOT EXISTS categories 
+    c.execute(''' CREATE TABLE IF NOT EXISTS categories 
               (id INTEGER PRIMARY KEY AUTOINCREMENT, 
               category TEXT) ''')
-    cursor.execute('''CREATE TABLE IF NOT EXISTS suggestions (
+    c.execute('''CREATE TABLE IF NOT EXISTS suggestions (
               id INTEGER PRIMARY KEY AUTOINCREMENT, 
               title TEXT, 
               description TEXT,
               category_id INTEGER,
               level INTEGER,
               FOREIGN KEY (category_id) REFERENCES categories(id))''')
-    cursor.execute('''CREATE TABLE IF NOT EXISTS suggestions (
+    c.execute('''CREATE TABLE IF NOT EXISTS suggestions (
                id INTEGER PRIMARY KEY AUTOINCREMENT, 
                title TEXT, 
                description TEXT,
@@ -46,6 +46,18 @@ def initialize_database():
            
     conn.commit()
 
+def add_user(username, name, email, password):
+    conn = sqlite3.connect('db/mindhug.db')
+    c = conn.cursor()
+    try:
+        c.execute('INSERT INTO users (username, name, email, password) VALUES (?, ?, ?, ?)', 
+                  (username, name, email, password))
+        conn.commit()
+    except sqlite3.IntegrityError:
+        return False
+    finally:
+        conn.close()
+    return True
 
 def get_users():
     conn = sqlite3.connect('db/mindhug.db')
@@ -54,19 +66,6 @@ def get_users():
     users = c.fetchall()
     conn.close()
     return users
-
-def add_user(username, name, email, password):
-    conn = sqlite3.connect('db/mindhug.db')
-    c = conn.cursor()
-    try:
-        c.execute('INSERT INTO users (username, name, email, password) VALUES (?, ?, ?, ?)', 
-                  (username, name, email, password))
-        conn.commit()
-        return True
-    except sqlite3.IntegrityError:
-        return False
-    finally:
-        conn.close()
 
 #inserisce una riga nel db
 
