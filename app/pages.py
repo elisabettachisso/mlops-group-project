@@ -116,8 +116,15 @@ def display_suggestions():
         st.write(
         "- [Mindfulness Exercises](https://www.headspace.com)\n"
         "- [Stress Management Techniques](https://www.helpguide.org/articles/stress/stress-management.htm)")
-        display_all_tables('mindhug.db')
+        if st.button("Aggiungi Categorie"):
+            try:
+                add_categories()
+                st.success("Categorie aggiunte con successo!")
+            except Exception as e:
+                st.error(f"Si è verificato un errore durante l'aggiunta delle categorie: {e}")
 
+                display_all_tables('mindhug.db')
+        
 def display_all_tables(db_name):
     try:
         # Connessione al database
