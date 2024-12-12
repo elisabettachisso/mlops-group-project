@@ -32,7 +32,7 @@ def main_page():
     col1, col2 = st.columns([1, 5])  
 
     with col1:
-        st.image("logomindhug.png", width=200) 
+        st.image("app/images/logomindhug.png", width=200) 
 
     with col2:
         st.markdown(f"<h1>{title}</h1>", unsafe_allow_html=True)
