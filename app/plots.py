@@ -81,8 +81,6 @@ def plot_sleep_duration(user_id):
         )
         st.plotly_chart(fig_sleep)
 
-    else:
-        st.write("Non ci sono risposte disponibili per questo utente.")
 
 
 
@@ -171,10 +169,6 @@ def plots(user_id):
         )
         st.plotly_chart(fig_academic)
 
-    else:
-        st.write("Non ci sono risposte disponibili per questo utente.")
-
-
 def plot_dietary_habits(user_id):
     """
     Visualizza un grafico a torta delle abitudini alimentari per un utente specifico.
@@ -226,9 +220,8 @@ def plot_dietary_habits(user_id):
             # Mostra il grafico con Streamlit
             st.plotly_chart(fig)
         else:
-            st.write("⚠️ Nessun dato valido per Abitudini Alimentari.")
-    else:
-        st.write("Non ci sono risposte disponibili per questo utente.")
+            st.write("⚠️ Nessun dato valido per Abitudini Alimentari.") 
+
 
 def statistic_plots(user_id):
     plot_sleep_duration(user_id)

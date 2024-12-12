@@ -1,12 +1,13 @@
 import streamlit as st
 from database import initialize_database, add_response, get_responses, get_last_response
-from route import go_to_login, go_to_register, logout
+from route import go_to_login, go_to_register
 from ml_utils import calculate_risk
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from plots import plot_risk_indicator, statistic_plots
+from auth import logout
 initialize_database()
 
 def home_page():
@@ -19,13 +20,6 @@ def home_page():
         st.button("Vai alla Registrazione", on_click=go_to_register)
 
 def main_page():
-    # Configurazione della pagina
-    st.set_page_config(
-        page_title="MindHug",
-        page_icon="🧠",
-        layout="centered",
-        initial_sidebar_state="collapsed"
-    )
 
     # Intestazione
 
