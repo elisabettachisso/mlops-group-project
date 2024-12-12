@@ -1,4 +1,5 @@
 import sqlite3 
+from hashlib import sha256
 
 def initialize_database(): 
     conn = sqlite3.connect('mindhug.db') 
@@ -58,9 +59,10 @@ def get_users():
 def add_user(username, name, email, password):
     conn = sqlite3.connect('mindhug.db')
     c = conn.cursor()
+    password_hash = sha256(password.encode()).hexdigest()
     try:
         c.execute('INSERT INTO users (username, name, email, password) VALUES (?, ?, ?, ?)', 
-                  (username, name, email, password))
+                  (username, name, email, password_hash))
         conn.commit()
         return True
     except sqlite3.IntegrityError:
@@ -73,7 +75,8 @@ def add_user(username, name, email, password):
 def verify_user(username, password):
     conn = sqlite3.connect('mindhug.db')
     c = conn.cursor()
-    c.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password))
+    password_hash = sha256(password.encode()).hexdigest()
+    c.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password_hash))
     user = c.fetchone()
     conn.close()
     return user
