@@ -7,3 +7,4 @@ bcrypt
 streamlit_authenticator
 pytest
 pytest-cov
+plotly
