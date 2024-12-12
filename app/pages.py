@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 from database import initialize_database, add_response, get_responses, get_last_response
 from route import go_to_login, go_to_register, logout
 from ml_utils import calculate_risk
@@ -28,7 +29,7 @@ def main_page():
     )
 
     title = "MindHug"
-    logo_path = "logomindhug.png"  
+    logo_path = os.path.join(os.getcwd(), "images", "logomindhug.png")
 
     col1, col2 = st.columns([1, 5])  
 
