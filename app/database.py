@@ -206,3 +206,5 @@ def add_categories():
     conn.commit()
     conn.close()
     print("Categorie inseriti con successo!")
+    
+    

@@ -1,4 +1,5 @@
 import streamlit as st
+import sqlite3
 from database import initialize_database, add_categories, add_response, get_responses, get_last_response, add_suggestions
 from route import go_to_login, go_to_register
 from ml_utils import calculate_risk
@@ -111,23 +112,50 @@ def display_suggestions():
         st.header("Tips") 
         st.write("Here are some helpful tips:") 
         last_response = get_last_response(st.session_state.user_id)
-        if st.button("Aggiungi Suggestions"):
-            try:
-                add_suggestions()
-                st.success("Suggestions added successfully!")
-            except Exception as e:
-                st.error(f"An error occurred while adding suggestions: {e}")
-        if st.button("Aggiungi Categorie"):
-            try:
-                add_categories()
-                st.success("categories added successfully!")
-            except Exception as e:
-                st.error(f"An error occurred while adding suggestions: {e}")
         st.markdown("### Useful Resources")
         st.write(
         "- [Mindfulness Exercises](https://www.headspace.com)\n"
         "- [Stress Management Techniques](https://www.helpguide.org/articles/stress/stress-management.htm)")
+        display_all_tables('mindhug.db')
 
+def display_all_tables(db_name):
+    try:
+        # Connessione al database
+        conn = sqlite3.connect(db_name)
+        c = conn.cursor()
+        
+        # Ottieni i nomi di tutte le tabelle nel database
+        c.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = c.fetchall()
+        
+        if not tables:
+            st.write("No tables found in the database.")
+            return
+        
+        # Mostra il contenuto di ogni tabella
+        for table in tables:
+            table_name = table[0]
+            st.write(f"### Table: {table_name}")
+            
+            # Recupera i dati dalla tabella
+            c.execute(f"SELECT * FROM {table_name}")
+            rows = c.fetchall()
+            
+            if rows:
+                # Recupera i nomi delle colonne
+                c.execute(f"PRAGMA table_info({table_name});")
+                columns = [col[1] for col in c.fetchall()]
+                
+                # Mostra i dati come tabella
+                st.write(f"#### Columns: {columns}")
+                st.write(rows)
+            else:
+                st.write("This table is empty.")
+        
+        # Chiudi la connessione
+        conn.close()
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
 
 def fill_questionnaire(): 
     st.markdown("### Fill out the questionnaire")
