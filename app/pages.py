@@ -27,22 +27,15 @@ def main_page():
         initial_sidebar_state="collapsed"
     )
 
-    # Intestazione
-
-
-# Definisci il titolo e il logo
     title = "MindHug"
-    logo_path = "images/logomindhug.png"  # Sostituisci con il percorso del tuo logo
+    logo_path = "images/logomindhug.png"  
 
-# Usa st.columns per posizionare il logo e il titolo accanto
-    col1, col2 = st.columns([1, 5])  # Colonna per il logo e colonna per il titolo
+    col1, col2 = st.columns([1, 5])  
 
     with col1:
-        # Mostra il logo nella prima colonna
-        st.image(logo_path, width=200)  # Imposta la larghezza del logo
+        st.image(logo_path, width=200) 
 
     with col2:
-        # Mostra il titolo nella seconda colonna
         st.markdown(f"<h1>{title}</h1>", unsafe_allow_html=True)
 
     #st.title("🧠 MindHug")
@@ -63,9 +56,7 @@ def main_page():
         display_suggestions() 
     elif selection == "Compila Questionario": 
         fill_questionnaire()
-    # Sezione di input
-
-    # Sezione aggiuntiva
+    
     st.markdown("### Risorse Utili")
     st.write(
         "- [Esercizi di mindfulness](https://www.headspace.com)\n"
