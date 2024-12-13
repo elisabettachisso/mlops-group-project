@@ -2,7 +2,6 @@ import streamlit as st
 from database import get_responses
 import pandas as pd 
 import plotly.graph_objects as go
-from ml_utils import calculate_risk
 import plotly.express as px
 
 

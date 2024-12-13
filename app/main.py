@@ -20,6 +20,7 @@ def main():
     initial_sidebar_state="collapsed"
     )
 
+
     if check_session():
         main_page()
     else:
