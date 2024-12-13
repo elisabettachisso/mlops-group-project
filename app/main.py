@@ -12,6 +12,13 @@ if "page" not in st.session_state:
     st.session_state.page = "home"
 
 def main():
+    
+    st.set_page_config(
+    page_title="Welcome to Mindhug",
+    page_icon="🧠",
+    layout="centered",
+    initial_sidebar_state="collapsed"
+    )
 
     if check_session():
         main_page()
