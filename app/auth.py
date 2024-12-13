@@ -6,6 +6,9 @@ import time
 
 cookie_controller = CookieController()
 
+if "user_id" not in st.session_state:
+    st.session_state["user_id"] = None
+
 def login():
 
     st.set_page_config(page_title="Login", layout="centered")
@@ -54,7 +57,7 @@ def login():
             st.session_state.logged_in = True
             st.session_state.username = username
             st.session_state.user_id = user[0]
-            cookie_controller.set("user_id", st.session_state.user_id)
+            cookie_controller.set("user_id", st.session_state.user_id, max_age=3600)
             st.success("Login successful")
             time.sleep(0.5)  # Pause briefly before rerun
             st.rerun()
@@ -115,7 +118,7 @@ def registration():
             st.error("Passwords do not match")
         elif add_user(username, name, email, password):
             st.success("Registration successful! Please login.")
-            time.sleep(0.3)  # Pause briefly before rerun
+            time.sleep(0.3)  
             go_to_login()
             st.rerun()
         else:
@@ -129,27 +132,32 @@ def registration():
 
 
 def logout():
-    # Clear cookie by setting it to an empty value with a past expiration
+    if "user_id" in st.session_state:
         cookie_controller.set("user_id", "", max_age=0)
         st.session_state.pop("user_id", None)
         st.success("Logged out successfully!")
-        time.sleep(0.5)  # Pause briefly before rerun
-        st.session_state.page = "home"
-        st.rerun()
-        return True  # Rerun to clear the interface
+    else:
+        st.warning("You are not logged in.")
+    
+    time.sleep(0.5)  
+    st.session_state.page = "home"
+    st.rerun()
+
 
 def check_session():
-    # Check if the user_id cookie exists
+    # Controlla se i cookie sono pronti
+    if not cookie_controller.ready():
+        st.warning("Cookies are not ready. Please refresh the page.")
+        return False
+
+    # Recupera l'ID utente dal cookie
     user_id = cookie_controller.get("user_id")
     if user_id:
-        # Restore session
         st.session_state["user_id"] = user_id
         return True
     else:
+        st.warning("Session expired or not found. Please log in.")
         return False
-
-
-
 
 
 
