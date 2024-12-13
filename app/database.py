@@ -41,8 +41,7 @@ def initialize_database():
 
 def add_suggestions():
     conn = sqlite3.connect('mindhug.db')
-    c = conn.cursor()
-    
+    c = conn.cursor()    
     # Dati da inserire
     records = [
         ("Balance Studies and Personal Life", "Maintain your balance between studies and personal life. Keep organizing your time effectively.", 5, 0),
@@ -111,23 +110,26 @@ def add_categories():
     
     # Dati da inserire
     records = [
-        ("sleep-duration")
-        ("dietary-habits")
-        ("study-satisfaction")
-        ("study-hours")
-        ("academic-pressure")
-        ("cgpa")
-        ("financial-stress")
-        ("suicidal-thoughts")    
+        ("sleep-duration",),
+        ("dietary-habits",),
+        ("study-satisfaction",),
+        ("study-hours",),
+        ("academic-pressure",),
+        ("cgpa",),
+        ("financial-stress",),
+        ("suicidal-thoughts",)  
     ]
-    # Inserimento dei dati nella tabella suggestions
+    
+    # Inserimento dei dati nella tabella categories
     c.executemany('''
     INSERT INTO categories (category)
     VALUES (?)
     ''', records)
+    
     conn.commit()
     conn.close()
-    print("Categorie inseriti con successo!")
+    print("Categorie inserite con successo!")
+
 
 def get_users():
     conn = sqlite3.connect('mindhug.db')
