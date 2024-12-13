@@ -11,6 +11,7 @@ from plots import plot_risk_indicator, statistic_plots
 from auth import logout
 import plotly.graph_objects as go
 from streamlit_option_menu import option_menu
+from PIL import Image
 initialize_database()
 
 def home_page():
