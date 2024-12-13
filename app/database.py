@@ -45,6 +45,7 @@ def initialize_database():
                category_id INTEGER,
                FOREIGN KEY (category_id) REFERENCES categories(id))''')
 
+
     # # Nuovi record da aggiungere
     # records = [
     #     # (description, title, category_id, level)
