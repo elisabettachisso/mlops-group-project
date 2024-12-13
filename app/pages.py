@@ -56,7 +56,7 @@ def home_page():
 
     # Logo e titolo
     st.image(logo, width=200)
-    st.markdown("<h1>Welcome to <span style='color: #4CAF50;'>MindHug</span></h1>", unsafe_allow_html=True)
+    st.markdown("<h1>Welcome to <span style='color:#0d6efd';'>MindHug</span></h1>", unsafe_allow_html=True)
     st.markdown(
         "<p>Your personalized companion for mental well-being. Navigate through our tools to enhance your wellness and track your progress.</p>",
         unsafe_allow_html=True,
@@ -85,7 +85,7 @@ def home_page():
 def main_page():
 
 
-    st.write(f"Ciao, {st.session_state.username}🙂")
+    st.write(f"Ciao, {st.session_state.username} 🙂")
 
 
  
@@ -120,7 +120,7 @@ def main_page():
             st.image(logo_path, width=200)  # Imposta la larghezza del logo
 
         with col2:
-            st.markdown(f"<h1>{title}</h1>", unsafe_allow_html=True)
+            st.markdown(f"<h1>Welcome to <span style='color:#0d6efd' ;'>{title}</span></h1>", unsafe_allow_html=True)
         
         st.subheader("Your support for mental well-being")
 
@@ -221,6 +221,7 @@ def display_suggestions():
         
 
 def fill_questionnaire(): 
+  
     st.markdown("### Fill out the questionnaire")
     gender = st.radio("Gender:", ("Male", "Female"))
     age = st.number_input("Age:", min_value=1, max_value=100, step=1)
