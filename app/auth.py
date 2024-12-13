@@ -82,11 +82,10 @@ def check_session():
     if user_id:
         log_timestamp = get_user_last_log(user_id) 
         user = get_user(user_id)
-        print(user)
+
         if log_timestamp:
             data_datetime = datetime.strptime(log_timestamp[0], '%Y-%m-%d %H:%M:%S')
             log_life = datetime.now() - data_datetime - timedelta(hours=1)
-            print(log_life) 
             if log_life < timedelta(minutes=1):
                 st.session_state.logged_in = True
                 st.session_state.user_id = user_id
