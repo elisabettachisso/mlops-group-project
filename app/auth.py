@@ -145,6 +145,7 @@ def logout():
 
 
 def check_session():
+
     user_id = cookie_controller.get("user_id")
     if user_id:
         st.session_state["user_id"] = user_id
