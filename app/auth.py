@@ -22,7 +22,6 @@ def login():
     if login_button:
         user = verify_user(username, password)  # Verifica l'utente nel database
         if user:
-            log_user_access(user[0])
             st.session_state.logged_in = True
             st.session_state.username = username
             st.session_state.user_id = user[0]
@@ -84,7 +83,6 @@ def check_session():
         st.session_state.logged_in = True
         st.session_state.user_id = user_id
         # Log ogni volta che l'utente accede alla sessione valida
-        log_user_access(user_id)
         return True
     else:
         st.session_state.logged_in = False

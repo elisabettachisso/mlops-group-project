@@ -166,6 +166,8 @@ def verify_user(username, password):
     password_hash = sha256(password.encode()).hexdigest()
     c.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password_hash))
     user = c.fetchone()
+    if user:
+        log_user_access(user[0])
     conn.close()
     return user
 
