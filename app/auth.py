@@ -144,14 +144,19 @@ def logout():
 
 
 def check_session():
-
     user_id = cookie_controller.get("user_id")
     if user_id:
+        # Verifica se il cookie è scaduto
+        expiration_time = datetime.utcnow() + timedelta(seconds=10)
+        if datetime.utcnow() > expiration_time:
+            cookie_controller.set("user_id", "", max_age=0)  # Cancella il cookie
+            st.session_state.pop("user_id", None)
+            return False
         st.session_state["user_id"] = user_id
         return True
     else:
-        # st.warning("Session expired or not found. Please log in.")
         return False
+
 
 
 
