@@ -16,7 +16,7 @@ initialize_database()
 
 def home_page():
     # Carica un'immagine o logo
-    logo = Image.open("app/images/mindhug_logo.png")  # Cambia il percorso se necessario
+    logo = Image.open("app/images/logomindhugo.png")  # Cambia il percorso se necessario
 
     # Centra il contenuto sulla pagina
     st.markdown(
