@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 def load_model():
     """Carica il modello salvato dal file .pkl."""
     try:
-        with open('app/model/random_forest_model.pkl', 'rb') as file:
+        with open('model/random_forest_model.pkl', 'rb') as file:
             model = pickle.load(file)
         return model
     except FileNotFoundError:
