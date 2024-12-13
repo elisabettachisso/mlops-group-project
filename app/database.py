@@ -225,4 +225,12 @@ def get_last_response(user_id):
     last_response = c.fetchall()
     conn.close()
     return last_response
-    
+
+
+def get_suggestions():
+    conn = sqlite3.connect('mindhug.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM suggestions')
+    responses = c.fetchall()
+    conn.close()
+    return responses

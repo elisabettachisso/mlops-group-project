@@ -12,6 +12,7 @@ from auth import logout
 import plotly.graph_objects as go
 from streamlit_option_menu import option_menu
 from PIL import Image
+from suggestions import select_random_suggestions
 initialize_database()
 
 def home_page():
@@ -172,53 +173,56 @@ def display_statistics():
             st.write("No questionnaire has been completed yet!")
 
 def display_suggestions(): 
-        st.header("Tips") 
-        st.write("Here are some helpful tips:") 
-        last_response = get_last_response(st.session_state.user_id)
-        st.markdown("### Useful Resources")
-        st.write(
-        "- [Mindfulness Exercises](https://www.headspace.com)\n"
-        "- [Stress Management Techniques](https://www.helpguide.org/articles/stress/stress-management.htm)")
-        display_all_tables('mindhug.db')
+         st.header("Tips") 
+         st.write("Here are some helpful tips based on the results of your last questionnaire:") 
+         last_response = get_last_response(st.session_state.user_id)
+         responses = select_random_suggestions(last_response)
+         for response in responses:
+             st.markdown(f"**{response[1]}**" + "\n  - " + response[2])
+
+         st.markdown("### Useful Resources")
+         st.write(
+         "- [Mindfulness Exercises](https://www.headspace.com)\n"
+         "- [Stress Management Techniques](https://www.helpguide.org/articles/stress/stress-management.htm)")
         
-def display_all_tables(db_name):
-    try:
-        # Connessione al database
-        conn = sqlite3.connect(db_name)
-        c = conn.cursor()
+# def display_all_tables(db_name):
+#     try:
+#         # Connessione al database
+#         conn = sqlite3.connect(db_name)
+#         c = conn.cursor()
         
-        # Ottieni i nomi di tutte le tabelle nel database
-        c.execute("SELECT name FROM sqlite_master WHERE type='table';")
-        tables = c.fetchall()
+#         # Ottieni i nomi di tutte le tabelle nel database
+#         c.execute("SELECT name FROM sqlite_master WHERE type='table';")
+#         tables = c.fetchall()
         
-        if not tables:
-            st.write("No tables found in the database.")
-            return
+#         if not tables:
+#             st.write("No tables found in the database.")
+#             return
         
-        # Mostra il contenuto di ogni tabella
-        for table in tables:
-            table_name = table[0]
-            st.write(f"### Table: {table_name}")
+#         # Mostra il contenuto di ogni tabella
+#         for table in tables:
+#             table_name = table[0]
+#             st.write(f"### Table: {table_name}")
             
-            # Recupera i dati dalla tabella
-            c.execute(f"SELECT * FROM {table_name}")
-            rows = c.fetchall()
+#             # Recupera i dati dalla tabella
+#             c.execute(f"SELECT * FROM {table_name}")
+#             rows = c.fetchall()
             
-            if rows:
-                # Recupera i nomi delle colonne
-                c.execute(f"PRAGMA table_info({table_name});")
-                columns = [col[1] for col in c.fetchall()]
+#             if rows:
+#                 # Recupera i nomi delle colonne
+#                 c.execute(f"PRAGMA table_info({table_name});")
+#                 columns = [col[1] for col in c.fetchall()]
                 
-                # Mostra i dati come tabella
-                st.write(f"#### Columns: {columns}")
-                st.write(rows)
-            else:
-                st.write("This table is empty.")
+#                 # Mostra i dati come tabella
+#                 st.write(f"#### Columns: {columns}")
+#                 st.write(rows)
+#             else:
+#                 st.write("This table is empty.")
         
-        # Chiudi la connessione
-        conn.close()
-    except Exception as e:
-        st.error(f"An error occurred: {e}")
+#         # Chiudi la connessione
+#         conn.close()
+#     except Exception as e:
+#         st.error(f"An error occurred: {e}")
 
 def fill_questionnaire(): 
     st.markdown("### Fill out the questionnaire")
@@ -239,7 +243,7 @@ def fill_questionnaire():
         "What is your level of study?",
         ["Diploma", "Bachelor", "Master", "PhD"]
     )
-    suicidal_thoughts = st.radio("Have you ever had suicidal thoughts?", ("Yes", "No"))
+    suicidal_thoughts = st.radio("Have you ever had suicidal thoughts?", ("No", "Yes"))
     study_hours = st.slider("How many hours do you study per day?", min_value=0, max_value=10, step=1)
     financial_stress = st.slider("How stressed are you financially?", min_value=0, max_value=5, step=1)
     family_history = st.radio("Do you have any cases of mental illness in your family?", ("Yes", "No"))
