@@ -14,12 +14,7 @@ from streamlit_option_menu import option_menu
 initialize_database()
 
 def home_page():
-    st.set_page_config(
-        page_title="Welcome to Mindhug",
-        page_icon="🧠",
-        layout="centered",
-        initial_sidebar_state="collapsed"
-    )
+
     st.title("Welcome to Mindhug")
     st.write("Select an option:")
     col1, col2 = st.columns(2)
@@ -29,16 +24,8 @@ def home_page():
         st.button("Go to Registration", on_click=go_to_register)
 
 def main_page():
-  
-    st.set_page_config(
-        page_title="Mindhug",
-        page_icon="🧠",
-        layout="wide",
-        initial_sidebar_state="collapsed"
-    )
 
 
-    # Funzione per gestire la navigazione
     def navigation_bar():
         selected = option_menu(
             menu_title=None,  # Non mostrare un titolo (barra orizzontale)

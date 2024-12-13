@@ -11,8 +11,6 @@ if "user_id" not in st.session_state:
 
 def login():
 
-    st.set_page_config(page_title="Login", layout="centered")
-
     st.markdown(
         """
         <style>
@@ -69,8 +67,7 @@ def login():
         st.rerun()
 
 def registration():
-    st.set_page_config(page_title="Register", layout="centered")
-
+   
     st.markdown(
         """
         <style>
@@ -151,7 +148,7 @@ def check_session():
         st.session_state["user_id"] = user_id
         return True
     else:
-        st.warning("Session expired or not found. Please log in.")
+        # st.warning("Session expired or not found. Please log in.")
         return False
 
 
