@@ -1,15 +1,9 @@
 import streamlit as st
-import sqlite3
 from database import initialize_database, add_response, get_responses, get_last_response
 from route import go_to_login, go_to_register
 from ml_utils import calculate_risk, avarage_risk_percentage
-import plotly.graph_objects as go
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
 from plots import plot_risk_indicator, statistic_plots
 from auth import logout
-import plotly.graph_objects as go
 from streamlit_option_menu import option_menu
 from PIL import Image
 from suggestions import select_random_suggestions
@@ -94,14 +88,14 @@ def main_page():
     def navigation_bar():
         selected = option_menu(
             menu_title=None,  # Non mostrare un titolo (barra orizzontale)
-            options=["Home", "Statistics", "Tips", "Fill Questionnaire"],  # Opzioni di navigazione
+            options=["Home", "Fill Questionnaire", "Tips", "Statistics"],  # Opzioni di navigazione
             icons=["house", "bar-chart", "lightbulb", "file-text"],  # Icone da FontAwesome
             menu_icon="cast",  # Icona del menu (non visibile in modalità orizzontale)
             default_index=0,  # Indice dell'opzione selezionata di default
             orientation="horizontal",  # Modalità orizzontale
             styles={
                 "container": {"padding": "0!important", "background-color": "black"},
-                "nav-link": {"font-size": "16px", "text-align": "center", "margin": "0px", "--hover-color": "#eee"},
+                "nav-link": {"font-size": "16px", "text-align": "center", "margin": "0px", "--hover-color": "lightblue"},
                 "nav-link-selected": {"background-color": "#0d6efd", "color": "white"},
             },
         )
@@ -124,10 +118,46 @@ def main_page():
             st.markdown(f"<h1>{title}</h1>", unsafe_allow_html=True)
         
         st.subheader("Your support for mental well-being")
-        st.write(
-            "Welcome to **MindHug**, an app designed to help you track your mental well-being" 
-            "and provide personalized suggestions to take care of yourself."
-        )
+
+        # Introduction text
+        st.write("""
+        This app is designed to help you take control of your physical and mental health by providing insights and personalized advice based on your lifestyle. With our simple yet powerful features, you can track your well-being and make informed decisions to live a healthier, happier life.
+        """)
+
+        # Key Features Section
+        st.subheader("Key Features:")
+
+        # Feature 1: Self-assessment Questionnaire
+        st.write("""
+        1. **Self-assessment Questionnaire:**  
+        Start by completing a quick questionnaire that evaluates your current physical and mental well-being. The questions are tailored to give you a comprehensive view of your lifestyle.
+        """)
+
+        # Feature 2: Personalized Recommendations
+        st.write("""
+        2. **Personalized Recommendations:**  
+        Based on your responses, the app offers personalized tips and advice to help you improve your overall well-being. Whether it’s adjusting daily habits or finding new ways to cope with stress, you'll receive valuable insights to guide you along the way.
+        """)
+
+        # Feature 3: Visualize Your Progress
+        st.write("""
+        3. **Visualize Your Progress:**  
+        With beautifully designed charts and graphs, you can track your progress over time. The app stores your historical data, allowing you to see how your well-being evolves and identify trends that may need attention.
+        """)
+
+        # Goal Section
+        st.subheader("The Goal:")
+
+        st.write("""
+        The aim of this app is to raise awareness about how your lifestyle choices impact your mental health, particularly the risk of depression. With real-time updates on percentages and actionable areas for improvement, you’ll always know where you stand and how to take proactive steps toward a better life.
+        """)
+
+        # How to Use Section
+        st.subheader("How to Use It:")
+
+        st.write("""
+        The app is designed to be used periodically. By completing a new questionnaire each time, you can monitor your progress, see improvements, and make adjustments to continue enhancing your well-being. It’s a powerful tool for building a healthier, more balanced life one step at a time.
+        """)
 
         last_response = get_last_response(st.session_state.user_id)
         if last_response:
@@ -135,12 +165,7 @@ def main_page():
             risk_percentage = calculate_risk(*values)  # Usa l'unpacking per passare i valori come argomenti separati
             st.plotly_chart(plot_risk_indicator(risk_percentage))
         else: 
-            st.write("No questionnaire has been completed yet!")
-
-
-
-        
-
+            st.error("No questionnaire has been filled out yet!")
         
     if selection == "Statistics": 
         display_statistics()
@@ -170,59 +195,24 @@ def display_statistics():
             avarage_risk= avarage_risk_percentage(st.session_state.user_id)
             statistic_plots(st.session_state.user_id, avarage_risk)
         else:
-            st.write("No questionnaire has been completed yet!")
+            st.error("No questionnaire has been filled out yet!")
 
 def display_suggestions(): 
-         st.header("Tips") 
-         st.write("Here are some helpful tips based on the results of your last questionnaire:") 
-         last_response = get_last_response(st.session_state.user_id)
-         responses = select_random_suggestions(last_response)
-         for response in responses:
-             st.markdown(f"**{response[1]}**" + "\n  - " + response[2])
+        st.header("Tips") 
+        last_response = get_last_response(st.session_state.user_id)
+        if last_response:
+            st.write("Here are some helpful tips based on the results of your last questionnaire:") 
+            responses = select_random_suggestions(last_response)
+            for response in responses:
+                st.markdown(f"**{response[1]}**" + "\n  - " + response[2])
+        else:
+            st.error("No questionnaire has been filled out yet!")
 
-         st.markdown("### Useful Resources")
-         st.write(
+        st.markdown("### Useful Resources")
+        st.write(
          "- [Mindfulness Exercises](https://www.headspace.com)\n"
          "- [Stress Management Techniques](https://www.helpguide.org/articles/stress/stress-management.htm)")
         
-# def display_all_tables(db_name):
-#     try:
-#         # Connessione al database
-#         conn = sqlite3.connect(db_name)
-#         c = conn.cursor()
-        
-#         # Ottieni i nomi di tutte le tabelle nel database
-#         c.execute("SELECT name FROM sqlite_master WHERE type='table';")
-#         tables = c.fetchall()
-        
-#         if not tables:
-#             st.write("No tables found in the database.")
-#             return
-        
-#         # Mostra il contenuto di ogni tabella
-#         for table in tables:
-#             table_name = table[0]
-#             st.write(f"### Table: {table_name}")
-            
-#             # Recupera i dati dalla tabella
-#             c.execute(f"SELECT * FROM {table_name}")
-#             rows = c.fetchall()
-            
-#             if rows:
-#                 # Recupera i nomi delle colonne
-#                 c.execute(f"PRAGMA table_info({table_name});")
-#                 columns = [col[1] for col in c.fetchall()]
-                
-#                 # Mostra i dati come tabella
-#                 st.write(f"#### Columns: {columns}")
-#                 st.write(rows)
-#             else:
-#                 st.write("This table is empty.")
-        
-#         # Chiudi la connessione
-#         conn.close()
-#     except Exception as e:
-#         st.error(f"An error occurred: {e}")
 
 def fill_questionnaire(): 
     st.markdown("### Fill out the questionnaire")
@@ -246,7 +236,7 @@ def fill_questionnaire():
     suicidal_thoughts = st.radio("Have you ever had suicidal thoughts?", ("No", "Yes"))
     study_hours = st.slider("How many hours do you study per day?", min_value=0, max_value=10, step=1)
     financial_stress = st.slider("How stressed are you financially?", min_value=0, max_value=5, step=1)
-    family_history = st.radio("Do you have any cases of mental illness in your family?", ("Yes", "No"))
+    family_history = st.radio("Do you have any cases of mental illness in your family?", ("No", "Yes"))
 
     if st.button("Submit answer"):
         if add_response(st.session_state.user_id, gender, age, accademic_pressure, cgpa, study_satisfaction, sleep_duration, dietary_habits, degree, suicidal_thoughts,

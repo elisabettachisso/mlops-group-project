@@ -1,6 +1,6 @@
 import pickle
 import pandas as pd
-from database import initialize_database, add_response, get_responses
+from database import get_responses
 import matplotlib.pyplot as plt
 
 def load_model():
