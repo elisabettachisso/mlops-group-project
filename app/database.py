@@ -239,7 +239,7 @@ def get_access_logs():
 def get_user_last_log(user_id):
     conn = sqlite3.connect('mindhug.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT timestamp FROM user_access_log WHERE user_id = ? ORDER BY id DESC', (user_id,))
+    cursor.execute('SELECT timestamp FROM user_access_log WHERE user_id = ? ORDER BY id DESC LIMIT 1', (user_id,))
     log = cursor.fetchone()
     conn.close()
     return log
