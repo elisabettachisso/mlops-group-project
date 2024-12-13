@@ -2,7 +2,7 @@ import streamlit as st
 import sqlite3
 from database import initialize_database, add_categories, add_response, get_responses, get_last_response
 from route import go_to_login, go_to_register
-from ml_utils import calculate_risk
+from ml_utils import calculate_risk, avarage_risk_percentage
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -37,44 +37,59 @@ def main_page():
         initial_sidebar_state="collapsed"
     )
 
-    #st.image("images/logomindhug.png", width=200)  
 
-    # Barra laterale per navigare 
-    #with st.sidebar: 
-     #   selection = st.radio("Navigazione", ["Home", "Suggerimenti", "Compila Questionario"])
-
-# Sidebar con menu
-    with st.sidebar:
-        selection = option_menu(
-            menu_title="Navigation",  # Titolo del menu
-            options=["Home", "Statistics", "Tips", "Fill Questionnaire"],  # Opzioni
-            icons=["house", "bar-chart","lightbulb", "file-text"],  # Icone da FontAwesome
-            menu_icon="compass",  # Icona del menu
-            default_index=0,  # Prima opzione selezionata
+    # Funzione per gestire la navigazione
+    def navigation_bar():
+        selected = option_menu(
+            menu_title=None,  # Non mostrare un titolo (barra orizzontale)
+            options=["Home", "Statistics", "Tips", "Fill Questionnaire"],  # Opzioni di navigazione
+            icons=["house", "bar-chart", "lightbulb", "file-text"],  # Icone da FontAwesome
+            menu_icon="cast",  # Icona del menu (non visibile in modalità orizzontale)
+            default_index=0,  # Indice dell'opzione selezionata di default
+            orientation="horizontal",  # Modalità orizzontale
+            styles={
+                "container": {"padding": "0!important", "background-color": "black"},
+                "nav-link": {"font-size": "16px", "text-align": "center", "margin": "0px", "--hover-color": "#eee"},
+                "nav-link-selected": {"background-color": "#0d6efd", "color": "white"},
+            },
         )
+        return selected
+
+    # Mostra la barra di navigazione
+    selection = navigation_bar()
+
 
     if selection == "Home":
-            # Definisci il titolo e il logo
         title = "MindHug"
-        logo_path = "app/images/logomindhug.png"  # Sostituisci con il percorso del tuo logo
+        logo_path = "images/logomindhug.png"  # Sostituisci con il percorso del tuo logo
 
-    # Usa st.columns per posizionare il logo e il titolo accanto
         col1, col2 = st.columns([1, 5])  # Colonna per il logo e colonna per il titolo
 
         with col1:
-            # Mostra il logo nella prima colonna
             st.image(logo_path, width=200)  # Imposta la larghezza del logo
 
         with col2:
-            # Mostra il titolo nella seconda colonna
             st.markdown(f"<h1>{title}</h1>", unsafe_allow_html=True)
-
-        #st.title("🧠 MindHug")
+        
         st.subheader("Your support for mental well-being")
         st.write(
             "Welcome to **MindHug**, an app designed to help you track your mental well-being" 
             "and provide personalized suggestions to take care of yourself."
         )
+
+        last_response = get_last_response(st.session_state.user_id)
+        if last_response:
+            values = last_response[0][2:14]  # Crea una lista con i valori da last_response
+            risk_percentage = calculate_risk(*values)  # Usa l'unpacking per passare i valori come argomenti separati
+            st.plotly_chart(plot_risk_indicator(risk_percentage))
+        else: 
+            st.write("No questionnaire has been completed yet!")
+
+
+
+        
+
+        
     if selection == "Statistics": 
         display_statistics()
     elif selection == "Tips": 
@@ -97,14 +112,11 @@ def display_statistics():
         responses = get_responses(st.session_state.user_id)
         last_response = get_last_response(st.session_state.user_id)
         if last_response:
-            risk_percentage = calculate_risk(
-                last_response[0][2], last_response[0][3], last_response[0][4],
-                last_response[0][5], last_response[0][6], last_response[0][7],
-                last_response[0][8], last_response[0][9], last_response[0][10],
-                last_response[0][11], last_response[0][12], last_response[0][13]
-            )
-            plot_risk_indicator(risk_percentage)
-            statistic_plots(st.session_state.user_id, risk_percentage)
+            values = last_response[0][2:14]  # Crea una lista con i valori da last_response
+            risk_percentage = calculate_risk(*values)  # Usa l'unpacking per passare i valori come argomenti separati
+
+            avarage_risk= avarage_risk_percentage(st.session_state.user_id)
+            statistic_plots(st.session_state.user_id, avarage_risk)
         else:
             st.write("No questionnaire has been completed yet!")
 
@@ -194,31 +206,11 @@ def fill_questionnaire():
             st.success("Answer submitted successfully!") 
         else: 
             st.error("An error occurred while submitting the answer.")
-    # Calcolo del rischio
+
     risk_percentage = calculate_risk(gender, age, accademic_pressure, cgpa, study_satisfaction, sleep_duration, dietary_habits, degree, suicidal_thoughts, study_hours, financial_stress, family_history)
 
     st.plotly_chart(plot_risk_indicator(risk_percentage))
     
-    #responses = get_responses(st.session_state.user_id) 
-    
-    #for res in responses: 
-      #  st.write(res)
-
-def centered_container(content):
-    st.markdown(
-        """
-        <style>
-        .centered-container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-    st.markdown('<div class="centered-container">', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
 
 
 

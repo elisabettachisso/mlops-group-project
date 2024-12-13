@@ -114,6 +114,7 @@ def get_last_response(user_id):
     last_response = c.fetchall()
     conn.close()
     return last_response
+    
 
 def add_categories():
     conn = sqlite3.connect('mindhug.db')
