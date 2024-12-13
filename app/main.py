@@ -16,7 +16,7 @@ def main():
     st.set_page_config(
     page_title="Welcome to Mindhug",
     page_icon="🧠",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="collapsed"
     )
 
