@@ -48,7 +48,7 @@ def main_page():
 
     if selection == "Home":
         title = "MindHug"
-        logo_path = "images/logomindhug.png"  # Sostituisci con il percorso del tuo logo
+        logo_path = "app/images/logomindhug.png"  # Sostituisci con il percorso del tuo logo
 
         col1, col2 = st.columns([1, 5])  # Colonna per il logo e colonna per il titolo
 
