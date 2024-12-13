@@ -18,6 +18,8 @@ def login():
         username = st.text_input("Username")
         password = st.text_input("Password", type="password")
         login_button = st.form_submit_button("Login")
+        back_button = st.form_submit_button("Back")
+
 
     if login_button:
         user = verify_user(username, password)  # Verifica l'utente nel database
@@ -37,6 +39,9 @@ def login():
         else:
             st.error("Invalid username or password")
             return False
+    if back_button:
+        st.session_state.page = "home"
+        st.rerun()
 
 # Funzione per la registrazione
 def registration():
@@ -52,6 +57,7 @@ def registration():
         password = st.text_input("Password", type="password")
         password_confirm = st.text_input("Confirm Password", type="password")
         register_button = st.form_submit_button("Register")
+        back_button = st.form_submit_button("Back")
 
     if register_button:
         if password != password_confirm:
@@ -62,7 +68,9 @@ def registration():
             st.rerun()
         else:
             st.error("Username already exists. Please try another one.")
-
+    if back_button:
+        st.session_state.page = "home"
+        st.rerun()
 # Funzione per il logout
 def logout():
     """
