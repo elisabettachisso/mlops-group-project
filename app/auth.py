@@ -146,18 +146,20 @@ def logout():
 
 def check_session():
     user_id = cookie_controller.get("user_id")
-    if user_id:
-        # Verifica se il cookie è scaduto
-        expiration_time = datetime.utcnow() + timedelta(seconds=10)
-        if datetime.utcnow() > expiration_time:
-            cookie_controller.set("user_id", "", max_age=0)  # Cancella il cookie
-            st.session_state.pop("user_id", None)
-            return False
-        st.session_state["user_id"] = user_id
-        return True
-    else:
+    if user_id is None:
+        # Nessun cookie trovato, sessione non valida
         return False
 
+    # Logica per verificare se il cookie è valido (opzionale, se stai usando scadenze)
+    expiration_time = datetime.utcnow() + timedelta(seconds=10)
+    if datetime.utcnow() > expiration_time:
+        cookie_controller.set("user_id", "", max_age=0)  # Cancella il cookie
+        st.session_state.pop("user_id", None)
+        return False
+
+    # Se il cookie esiste ed è valido
+    st.session_state["user_id"] = user_id
+    return True
 
 
 
