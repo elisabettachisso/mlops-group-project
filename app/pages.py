@@ -12,6 +12,8 @@ initialize_database()
 logo_path = "app/images/logomindhug.png"
 
 def home_page():
+    st.write(st.session_state)
+
     # Carica un'immagine o logo
     logo = Image.open(logo_path)  # Cambia il percorso se necessario
 
@@ -86,6 +88,7 @@ def home_page():
 
 def main_page():
 
+    st.write(st.session_state)
 
     st.write(f"Ciao, {st.session_state.username} 🙂")
 

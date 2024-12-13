@@ -77,7 +77,15 @@ def logout():
     Esegue il logout dell'utente cancellando i cookie e reimpostando lo stato di sessione.
     """
     cookie_controller.remove("user_id")  # Cancella il cookie
-    st.session_state.clear()  # Reimposta lo stato della sessione
+    st.session_state.clear()
+    if "logged_in" not in st.session_state: 
+        st.session_state.logged_in = False 
+    if "username" not in st.session_state: 
+        st.session_state.username = None 
+    if "user_id" not in st.session_state: 
+        st.session_state.user_id = None 
+    if "page" not in st.session_state: 
+        st.session_state.page = "home"  # Reimposta lo stato della sessione
     st.success("You have been logged out!")
     st.rerun()
 
@@ -95,16 +103,40 @@ def check_session():
             data_datetime = datetime.strptime(log_timestamp[0], '%Y-%m-%d %H:%M:%S')
             log_life = datetime.now() - data_datetime - timedelta(hours=1)
             if log_life < timedelta(minutes=1):
-                st.session_state.logged_in = True
-                st.session_state.user_id = user_id
-                st.session_state.username = user[0][1]
+                st.session_state.clear()
+                if "logged_in" not in st.session_state: 
+                    st.session_state.logged_in = True
+                if "username" not in st.session_state: 
+                    st.session_state.username = user[0][1]
+                if "user_id" not in st.session_state: 
+                    st.session_state.user_id = user_id
+                if "page" not in st.session_state: 
+                    st.session_state.page = "main"
             # Log ogni volta che l'utente accede alla sessione valida
                 return True
             else: 
                 cookie_controller.remove("user_id")
+                st.session_state.clear()
+                if "logged_in" not in st.session_state: 
+                    st.session_state.logged_in = False 
+                if "username" not in st.session_state: 
+                    st.session_state.username = None 
+                if "user_id" not in st.session_state: 
+                    st.session_state.user_id = None 
+                if "page" not in st.session_state: 
+                    st.session_state.page = "home"
                 return False
         else:
             cookie_controller.remove("user_id")
+            st.session_state.clear()
+            if "logged_in" not in st.session_state: 
+                st.session_state.logged_in = False 
+            if "username" not in st.session_state: 
+                st.session_state.username = None 
+            if "user_id" not in st.session_state: 
+                st.session_state.user_id = None 
+            if "page" not in st.session_state: 
+                st.session_state.page = "home"
             return False
     else:
         st.session_state.logged_in = False
