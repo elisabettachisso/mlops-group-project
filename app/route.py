@@ -5,4 +5,5 @@ def go_to_login():
 
 def go_to_register():
     st.session_state.page = "register"
+    st.rerun()
 

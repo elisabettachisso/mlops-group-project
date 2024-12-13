@@ -9,9 +9,11 @@ from PIL import Image
 from suggestions import select_random_suggestions
 initialize_database()
 
+logo_path = "images/logomindhug.png"
+
 def home_page():
     # Carica un'immagine o logo
-    logo = Image.open("images/logomindhug.png")  # Cambia il percorso se necessario
+    logo = Image.open(logo_path)  # Cambia il percorso se necessario
 
     # Centra il contenuto sulla pagina
     st.markdown(
@@ -85,10 +87,7 @@ def home_page():
 def main_page():
 
 
-    st.write(f"Ciao, {st.session_state.username} 🙂")
-
-
- 
+    st.write(f"Ciao, {st.session_state.user_id} 🙂")
 
     def navigation_bar():
         selected = option_menu(
@@ -111,8 +110,7 @@ def main_page():
 
 
     if selection == "Home":
-        title = "MindHug"
-        logo_path = "images/logomindhug.png"  # Sostituisci con il percorso del tuo logo
+        title = "MindHug"  
 
         col1, col2 = st.columns([1, 5])  # Colonna per il logo e colonna per il titolo
 
