@@ -9,7 +9,7 @@ from PIL import Image
 from suggestions import select_random_suggestions
 initialize_database()
 
-logo_path = "images/logomindhug.png"
+logo_path = "app/images/logomindhug.png"
 
 def home_page():
     # Carica un'immagine o logo
