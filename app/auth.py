@@ -3,6 +3,7 @@ from database import add_user, verify_user
 from route import go_to_login, go_to_register
 from streamlit_cookies_controller import CookieController
 import time
+from datetime import datetime, timedelta
 
 cookie_controller = CookieController()
 
@@ -55,9 +56,11 @@ def login():
             st.session_state.logged_in = True
             st.session_state.username = username
             st.session_state.user_id = user[0]
-            cookie_controller.set("user_id", st.session_state.user_id, max_age=3600)
+            # Imposta il cookie con un parametro di scadenza
+            expiration_time = datetime.utcnow() + timedelta(seconds=10)
+            cookie_controller.set("user_id", st.session_state.user_id, expires=expiration_time)
             st.success("Login successful")
-            time.sleep(0.5)  # Pause briefly before rerun
+            time.sleep(0.5)
             st.rerun()
         else:
             st.error("Invalid username or password")
@@ -142,14 +145,19 @@ def logout():
 
 
 def check_session():
-
     user_id = cookie_controller.get("user_id")
     if user_id:
+        # Verifica se il cookie è scaduto
+        expiration_time = datetime.utcnow() + timedelta(seconds=10)
+        if datetime.utcnow() > expiration_time:
+            cookie_controller.set("user_id", "", max_age=0)  # Cancella il cookie
+            st.session_state.pop("user_id", None)
+            return False
         st.session_state["user_id"] = user_id
         return True
     else:
-        # st.warning("Session expired or not found. Please log in.")
         return False
+
 
 
 
