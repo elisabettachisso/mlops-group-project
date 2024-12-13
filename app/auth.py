@@ -145,12 +145,6 @@ def logout():
 
 
 def check_session():
-    # Controlla se i cookie sono pronti
-    if not cookie_controller.ready():
-        st.warning("Cookies are not ready. Please refresh the page.")
-        return False
-
-    # Recupera l'ID utente dal cookie
     user_id = cookie_controller.get("user_id")
     if user_id:
         st.session_state["user_id"] = user_id

@@ -37,19 +37,31 @@ def main_page():
         initial_sidebar_state="collapsed"
     )
 
-# Sidebar con menu
-    with st.sidebar:
-        selection = option_menu(
-            menu_title="Navigation",  # Titolo del menu
-            options=["Home", "Statistics", "Tips", "Fill Questionnaire"],  # Opzioni
-            icons=["house", "bar-chart","lightbulb", "file-text"],  # Icone da FontAwesome
-            menu_icon="compass",  # Icona del menu
-            default_index=0,  # Prima opzione selezionata
+
+    # Funzione per gestire la navigazione
+    def navigation_bar():
+        selected = option_menu(
+            menu_title=None,  # Non mostrare un titolo (barra orizzontale)
+            options=["Home", "Statistics", "Tips", "Fill Questionnaire"],  # Opzioni di navigazione
+            icons=["house", "bar-chart", "lightbulb", "file-text"],  # Icone da FontAwesome
+            menu_icon="cast",  # Icona del menu (non visibile in modalità orizzontale)
+            default_index=0,  # Indice dell'opzione selezionata di default
+            orientation="horizontal",  # Modalità orizzontale
+            styles={
+                "container": {"padding": "0!important", "background-color": "black"},
+                "nav-link": {"font-size": "16px", "text-align": "center", "margin": "0px", "--hover-color": "#eee"},
+                "nav-link-selected": {"background-color": "#0d6efd", "color": "white"},
+            },
         )
+        return selected
+
+    # Mostra la barra di navigazione
+    selection = navigation_bar()
+
 
     if selection == "Home":
         title = "MindHug"
-        logo_path = "app/images/logomindhug.png"  # Sostituisci con il percorso del tuo logo
+        logo_path = "images/logomindhug.png"  # Sostituisci con il percorso del tuo logo
 
         col1, col2 = st.columns([1, 5])  # Colonna per il logo e colonna per il titolo
 

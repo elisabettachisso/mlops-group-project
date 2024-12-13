@@ -104,7 +104,7 @@ def plots(user_id, risk_percentage):
             x='timestamp',
             y='study_satisfaction',
             title="Study satisfaction",
-            labels={'timestamp': "Time", 'study_satisfaction': "Soddisfazione studio"}
+            labels={'timestamp': "Time", 'study_satisfaction': "Study satisfaction"}
         )
 
 
@@ -113,7 +113,7 @@ def plots(user_id, risk_percentage):
             x='timestamp',
             y='study_hours',
             title="Study hours",
-            labels={'timestamp': "Time", 'study_hours': "Ore di studio"}
+            labels={'timestamp': "Time", 'study_hours': "Study hours"}
         )
 
 
