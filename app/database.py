@@ -136,13 +136,14 @@ def add_categories():
     print("Categorie inserite con successo!")
 
 
-def get_users():
+def get_user(user_id):
     conn = sqlite3.connect('mindhug.db')
     c = conn.cursor()
-    c.execute('SELECT * FROM users')
-    users = c.fetchall()
+    c.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+    user = c.fetchall()
     conn.close()
-    return users
+    return user
+
 
 def add_user(username, name, email, password):
     conn = sqlite3.connect('mindhug.db')
@@ -233,3 +234,12 @@ def get_access_logs():
     logs = cursor.fetchall()
     conn.close()
     return logs
+
+
+def get_user_last_log(user_id):
+    conn = sqlite3.connect('mindhug.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT timestamp FROM user_access_log WHERE user_id = ? ORDER BY id DESC', (user_id,))
+    log = cursor.fetchone()
+    conn.close()
+    return log

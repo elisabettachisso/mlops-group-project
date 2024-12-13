@@ -2,7 +2,7 @@ import streamlit as st
 from hashlib import sha256
 from datetime import datetime, timedelta
 from streamlit_cookies_controller import CookieController
-from database import verify_user, add_user, log_user_access
+from database import verify_user, add_user, get_user_last_log, get_user
 
 # Inizializzazione del gestore dei cookie
 cookie_controller = CookieController()
@@ -27,7 +27,7 @@ def login():
             st.session_state.user_id = user[0]
 
             # Imposta il cookie con una scadenza
-            expiration_time = datetime.utcnow() + timedelta(days=1)  # Cookie valido per 1 giorno
+            expiration_time = datetime.now() + timedelta(seconds=10)  # Cookie valido per 1 giorno
             cookie_controller.set("user_id", user[0], expires=expiration_time)
 
             # Log dell'accesso utente
@@ -68,7 +68,7 @@ def logout():
     """
     Esegue il logout dell'utente cancellando i cookie e reimpostando lo stato di sessione.
     """
-    cookie_controller.set("user_id", "")  # Cancella il cookie
+    cookie_controller.remove("user_id")  # Cancella il cookie
     st.session_state.clear()  # Reimposta lo stato della sessione
     st.success("You have been logged out!")
     st.rerun()
@@ -80,10 +80,25 @@ def check_session():
     """
     user_id = cookie_controller.get("user_id")
     if user_id:
-        st.session_state.logged_in = True
-        st.session_state.user_id = user_id
-        # Log ogni volta che l'utente accede alla sessione valida
-        return True
+        log_timestamp = get_user_last_log(user_id) 
+        user = get_user(user_id)
+        print(user)
+        if log_timestamp:
+            data_datetime = datetime.strptime(log_timestamp[0], '%Y-%m-%d %H:%M:%S')
+            log_life = datetime.now() - data_datetime - timedelta(hours=1)
+            print(log_life) 
+            if log_life < timedelta(minutes=1):
+                st.session_state.logged_in = True
+                st.session_state.user_id = user_id
+                st.session_state.username = user[0][1]
+            # Log ogni volta che l'utente accede alla sessione valida
+                return True
+            else: 
+                cookie_controller.remove("user_id")
+                return False
+        else:
+            cookie_controller.remove("user_id")
+            return False
     else:
         st.session_state.logged_in = False
         st.session_state.user_id = None

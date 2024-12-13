@@ -87,7 +87,7 @@ def home_page():
 def main_page():
 
 
-    st.write(f"Ciao, {st.session_state.user_id} 🙂")
+    st.write(f"Ciao, {st.session_state.username} 🙂")
 
     def navigation_bar():
         selected = option_menu(

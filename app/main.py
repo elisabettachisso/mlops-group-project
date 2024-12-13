@@ -43,7 +43,6 @@ def main():
         st.session_state.page = "home"
         st.session_state.logged_in = False
         st.rerun()
-
 # Entry point
 if __name__ == "__main__":
     main()
