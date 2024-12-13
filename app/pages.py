@@ -14,14 +14,77 @@ from streamlit_option_menu import option_menu
 initialize_database()
 
 def home_page():
+    # Carica un'immagine o logo
+    logo = Image.open("app/images/mindhug_logo.png")  # Cambia il percorso se necessario
 
-    st.title("Welcome to Mindhug")
-    st.write("Select an option:")
-    col1, col2 = st.columns(2)
+    # Centra il contenuto sulla pagina
+    st.markdown(
+        """
+        <style>
+        .centered-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .custom-button {
+            padding: 0.75rem 2rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .custom-button:hover {
+            background-color: #45a049;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # Contenitore principale
+    st.markdown('<div class="centered-container">', unsafe_allow_html=True)
+
+    # Logo e titolo
+    st.image(logo, width=200)
+    st.markdown("<h1>Welcome to <span style='color: #4CAF50;'>MindHug</span></h1>", unsafe_allow_html=True)
+    st.markdown(
+        "<p>Your personalized companion for mental well-being. Navigate through our tools to enhance your wellness and track your progress.</p>",
+        unsafe_allow_html=True,
+    )
+
+    # Contenitore per i pulsanti
+    st.markdown('<div class="button-container">', unsafe_allow_html=True)
+
+    col1, col2 = st.columns([1, 1])
+
     with col1:
-        st.button("Go to Login", on_click=go_to_login)
+        if st.button("Go to Login"):
+            go_to_login()
+
     with col2:
-        st.button("Go to Registration", on_click=go_to_register)
+        if st.button("Go to Registration"):
+            go_to_register()
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # Footer
+    st.markdown("---")
+    st.markdown("<p>© 2024 MindHug. All rights reserved.</p>", unsafe_allow_html=True)
+
 
 def main_page():
 
