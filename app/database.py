@@ -44,6 +44,11 @@ def initialize_database():
                description TEXT,
                category_id INTEGER,
                FOREIGN KEY (category_id) REFERENCES categories(id))''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS user_access_log (
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      user_id INTEGER,
+                      timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                      FOREIGN KEY (user_id) REFERENCES users(id))''')
 
 
     # # Nuovi record da aggiungere
@@ -235,3 +240,23 @@ def get_suggestions():
     responses = c.fetchall()
     conn.close()
     return responses
+
+def log_user_access(user_id):
+    """
+    Registra l'accesso di un utente nella tabella di log.
+    """
+    conn = sqlite3.connect('mindhug.db')
+    cursor = conn.cursor()
+    try:
+        cursor.execute('''INSERT INTO user_access_log (user_id) VALUES (?)''', (user_id,))
+        conn.commit()
+    finally:
+        conn.close()
+
+def get_access_logs():
+    conn = sqlite3.connect('mindhug.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM user_access_log')
+    logs = cursor.fetchall()
+    conn.close()
+    return logs

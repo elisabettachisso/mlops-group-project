@@ -69,7 +69,7 @@ def logout():
     """
     Esegue il logout dell'utente cancellando i cookie e reimpostando lo stato di sessione.
     """
-    cookie_controller.delete("user_id")  # Cancella il cookie
+    cookie_controller.set("user_id", "")  # Cancella il cookie
     st.session_state.clear()  # Reimposta lo stato della sessione
     st.success("You have been logged out!")
     st.rerun()
@@ -91,11 +91,6 @@ def check_session():
         st.session_state.user_id = None
         return False
 
-# Funzione di hashing della password
-def hash_password(password):
-    """
-    Converte una password in un hash sicuro utilizzando SHA-256.
-    """
-    return sha256(password.encode()).hexdigest()
+
 
 
