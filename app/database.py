@@ -115,36 +115,3 @@ def get_last_response(user_id):
     conn.close()
     return last_response
     
-
-def add_categories():
-    conn = sqlite3.connect('mindhug.db')
-    c = conn.cursor()
-
-    # Assicurati che la tabella 'categories' esista
-    c.execute('''
-    CREATE TABLE IF NOT EXISTS categories (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        category TEXT UNIQUE
-    )
-    ''')
-
-    # Dati da inserire
-    records = [
-        ("sleep-duration",),
-        ("dietary-habits",),
-        ("study-satisfaction",),
-        ("study-hours",),
-        ("academic-pressure",),
-        ("cgpa",),
-        ("financial-stress",),
-        ("suicidal-thoughts",)
-    ]
-
-    # Inserimento dei dati
-    try:
-        c.executemany('INSERT OR IGNORE INTO categories (category) VALUES (?)', records)
-        conn.commit()
-    except sqlite3.Error as e:
-        st.error(f"Database error: {e}")
-    finally:
-        conn.close()

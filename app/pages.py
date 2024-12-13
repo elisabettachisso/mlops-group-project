@@ -1,6 +1,6 @@
 import streamlit as st
 import sqlite3
-from database import initialize_database, add_categories, add_response, get_responses, get_last_response
+from database import initialize_database, add_response, get_responses, get_last_response
 from route import go_to_login, go_to_register
 from ml_utils import calculate_risk, avarage_risk_percentage
 import plotly.graph_objects as go
@@ -128,14 +128,7 @@ def display_suggestions():
         st.write(
         "- [Mindfulness Exercises](https://www.headspace.com)\n"
         "- [Stress Management Techniques](https://www.helpguide.org/articles/stress/stress-management.htm)")
-        if st.button("Aggiungi Categorie"):
-            try:
-                add_categories()
-                st.success("Categorie aggiunte con successo!")
-            except Exception as e:
-                st.error(f"Si è verificato un errore durante l'aggiunta delle categorie: {e}")
-
-                display_all_tables('mindhug.db')
+        display_all_tables('mindhug.db')
         
 def display_all_tables(db_name):
     try:
