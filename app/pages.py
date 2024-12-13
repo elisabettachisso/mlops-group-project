@@ -85,6 +85,11 @@ def home_page():
 def main_page():
 
 
+    st.write(f"Ciao, {st.session_state.username}🙂")
+
+
+ 
+
     def navigation_bar():
         selected = option_menu(
             menu_title=None,  # Non mostrare un titolo (barra orizzontale)
@@ -173,10 +178,11 @@ def main_page():
         display_suggestions() 
     elif selection == "Fill Questionnaire": 
         fill_questionnaire()
-    
+
     if st.button("Logout"):
-        logout()
-        st.rerun()
+         logout()
+         st.rerun()
+
     
     # Footer
     st.markdown("---")
