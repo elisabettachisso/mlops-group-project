@@ -71,8 +71,9 @@ def map_response_to_levels(response):
 
     return levels
 
-def select_random_suggestions(last_response):
+import random
 
+def select_random_suggestions(last_response):
     # Mappa degli ID categoria
     levels = map_response_to_levels(last_response)
 
@@ -86,24 +87,29 @@ def select_random_suggestions(last_response):
         7: "financial_stress",
         8: "suicidal_thoughts"
     }
-    
 
     # Seleziona 3 categorie casuali
     selected_categories = random.sample(range(1, 9), 3)
-    
+
     # Connessione al database
     responses = get_suggestions()
 
     if responses:
-        suggestions = []
         final_3suggestions = []
-        
+
         for category in selected_categories:
-            suggestions.clear()
-            for response in responses: 
-                if response[3] == category:
-                    if levels[category_mapping[category]] == response[4]:
-                        suggestions.append(response)
-            final_3suggestions.append(random.choice(suggestions))
+            suggestions = [
+                response
+                for response in responses
+                if response[3] == category and levels[category_mapping[category]] == response[4]
+            ]
+            if suggestions:  # Controlla che ci siano suggerimenti disponibili
+                final_3suggestions.append(random.choice(suggestions))
+            else:
+                # Aggiungi un messaggio o un suggerimento alternativo se non ci sono dati
+                final_3suggestions.append(("No suggestions available", "Consider exploring more general tips.", None))
+
         return final_3suggestions
-    
+    else:
+        # Se non ci sono risposte disponibili, restituisci un valore di fallback
+        return [("No data", "No suggestions found in the database.", None)]
