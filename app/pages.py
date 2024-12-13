@@ -1,5 +1,5 @@
 import streamlit as st
-from database import initialize_database, add_response, get_responses, get_last_response
+from database import initialize_database, add_response, get_responses, get_last_response, add_suggestions, add_categories
 from route import go_to_login, go_to_register
 from ml_utils import calculate_risk, avarage_risk_percentage
 from plots import plot_risk_indicator, statistic_plots
@@ -213,7 +213,18 @@ def display_suggestions():
                 st.markdown(f"**{response[1]}**" + "\n  - " + response[2])
         else:
             st.error("No questionnaire has been filled out yet!")
-
+        if st.button("Aggiungi Suggestions"):
+            try:
+                add_suggestions()
+                st.success("Suggestions added successfully!")
+            except Exception as e:
+                st.error(f"An error occurred while adding suggestions: {e}")
+        if st.button("Aggiungi Categorie"):
+            try:
+                add_categories()
+                st.success("categories added successfully!")
+            except Exception as e:
+                st.error(f"An error occurred while adding suggestions: {e}")
         st.markdown("### Useful Resources")
         st.write(
          "- [Mindfulness Exercises](https://www.headspace.com)\n"

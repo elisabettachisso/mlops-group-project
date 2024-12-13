@@ -38,127 +38,96 @@ def initialize_database():
               category_id INTEGER,
               level INTEGER,
               FOREIGN KEY (category_id) REFERENCES categories(id))''')
-    cursor.execute('''CREATE TABLE IF NOT EXISTS suggestions (
-               id INTEGER PRIMARY KEY AUTOINCREMENT, 
-               title TEXT, 
-               description TEXT,
-               category_id INTEGER,
-               FOREIGN KEY (category_id) REFERENCES categories(id))''')
 
-
-    # # Nuovi record da aggiungere
-    # records = [
-    #     # (description, title, category_id, level)
-    #     ("Maintain your balance between studies and personal life. Keep organizing your time effectively.", 
-    #     "Balance Studies and Personal Life", 5, 0),
-    #     ("Use techniques like time-blocking to ensure you have time for relaxing activities.", 
-    #     "Time Management with Time-Blocking", 5, 0),
-    #     ("Reduce academic pressure by discussing workloads and deadlines with your professors or tutors.", 
-    #     "Discuss Workloads with Professors", 5, 1),
-    #     ("Try stress management techniques such as meditation or breathing exercises.", 
-    #     "Practice Stress Management Techniques", 5, 1),
-    #     ("Consider consulting an academic counselor for personalized support.", 
-    #     "Seek Academic Counseling", 5, 2),
-    #     ("Explore options to reduce course loads or assignments, if possible.", 
-    #     "Reduce Course Loads", 5, 2),
-    #     ("Join support groups or seek psychological help to manage academic stress effectively.", 
-    #     "Join Support Groups or Seek Help", 5, 2),
-    #     ("Stay motivated and continue to track your progress.", 
-    #     "Stay Motivated and Track Progress", 6, 0),
-    #     ("Set SMART (Specific, Measurable, Achievable, Relevant, Time-bound) goals to further improve.", 
-    #     "Set SMART Goals", 6, 0),
-    #     ("Focus on improving in small areas, like working on one subject at a time.", 
-    #     "Focus on Small Improvements", 6, 1),
-    #     ("Use tools like study apps or join study groups to enhance learning.", 
-    #     "Use Study Apps or Join Groups", 6, 1),
-    #     ("Shift your focus from grades to the learning process itself.", 
-    #     "Focus on Learning Over Grades", 6, 2),
-    #     ("Consult your tutor or professor for feedback and recovery strategies.", 
-    #     "Seek Feedback from Tutors", 6, 2),
-    #     ("Consider taking an academic break if necessary.", 
-    #     "Consider Academic Breaks", 6, 2),
-    #     ("Identify what gives you satisfaction in your studies and incorporate it further into your routine.", 
-    #     "Find Satisfaction in Studies", 3, 0),
-    #     ("Keep balancing your time between studying and personal hobbies.", 
-    #     "Balance Studies and Hobbies", 3, 0),
-    #     ("Explore more engaging study methods, such as gamification or visual tools like mind maps.", 
-    #     "Use Engaging Study Methods", 3, 1),
-    #     ("Connect with peers to exchange ideas and make studying more dynamic.", 
-    #     "Connect with Peers", 3, 1),
-    #     ("Reflect on your academic motivations and goals. Discuss them with a mentor or counselor.", 
-    #     "Reflect on Academic Goals", 3, 2),
-    #     ("Modify your study environment to make it more comfortable and less stressful.", 
-    #     "Improve Study Environment", 3, 2),
-    #     ("Maintain a regular sleep routine, going to bed and waking up at consistent times.", 
-    #     "Maintain a Sleep Routine", 1, 0),
-    #     ("Avoid caffeine or electronic devices before bedtime.", 
-    #     "Avoid Caffeine Before Bed", 1, 0),
-    #     ("Try relaxation techniques like meditation or reading a book before sleeping.", 
-    #     "Try Relaxation Before Bed", 1, 1),
-    #     ("Create a better sleep environment: ensure it’s dark, quiet, and at a comfortable temperature.", 
-    #     "Create an Optimal Sleep Environment", 1, 1),
-    #     ("Consult a doctor if you’re experiencing insomnia or sleep disturbances.", 
-    #     "Consult a Doctor for Sleep Issues", 1, 2),
-    #     ("Adopt an evening routine that encourages deep, restorative sleep.", 
-    #     "Adopt an Evening Routine", 1, 2),
-    #     ("Continue following a balanced diet, including fresh and nutritious foods.", 
-    #     "Follow a Balanced Diet", 2, 0),
-    #     ("Monitor your hydration and ensure you drink enough water.", 
-    #     "Monitor Hydration", 2, 0),
-    #     ("Reduce the intake of sugars and processed foods. Add more fruits, vegetables, and proteins to your diet.", 
-    #     "Reduce Sugars and Eat Healthy", 2, 1),
-    #     ("Plan meals in advance to avoid skipping meals.", 
-    #     "Plan Meals Ahead", 2, 1),
-    #     ("Consult a nutritionist to create a diet plan that enhances both mental and physical well-being.", 
-    #     "Consult a Nutritionist", 2, 2),
-    #     ("Avoid relying on comfort food and seek healthier alternatives to manage stress.", 
-    #     "Avoid Comfort Food", 2, 2),
-    #     ("Talk to someone you trust about your feelings, even if they seem mild.", 
-    #     "Talk About Feelings", 8, 0),
-    #     ("Keep track of your emotions with a journal or a mental health app.", 
-    #     "Track Emotions", 8, 0),
-    #     ("Seek professional help from a counselor or psychologist. Don’t ignore these warning signs.", 
-    #     "Seek Professional Help", 8, 1),
-    #     ("Join support groups to connect with others experiencing similar challenges.", 
-    #     "Join Support Groups", 8, 1),
-    #     ("Reach out to a mental health professional or emergency services immediately.", 
-    #     "Reach Out for Immediate Help", 8, 2),
-    #     ("Speak with trusted friends or family members and avoid dealing with these thoughts alone.", 
-    #     "Speak with Trusted People", 8, 2),
-    #     ("Maintain a healthy balance between work/study and personal time.", 
-    #     "Balance Work and Personal Time", 4, 0),
-    #     ("Take regular breaks to enhance productivity and avoid burnout.", 
-    #     "Take Regular Breaks", 4, 0),
-    #     ("Consider reducing intense study or work hours if possible.", 
-    #     "Reduce Intense Work Hours", 4, 1),
-    #     ("Use productivity techniques like the Pomodoro method to manage time effectively.", 
-    #     "Use the Pomodoro Method", 4, 1),
-    #     ("Consider significantly reducing your workload.", 
-    #     "Consider Reducing Workload", 4, 2),
-    #     ("Consult a counselor for strategies to manage your time and stress more effectively.", 
-    #     "Consult a Counselor for Strategies", 4, 2),
-    #     ("Continue monitoring your expenses and maintaining a good budget.", 
-    #     "Monitor Expenses and Budget", 7, 0),
-    #     ("Look for ways to save or explore opportunities for additional income.", 
-    #     "Explore Income Opportunities", 7, 0),
-    #     ("Talk to a financial advisor to identify short- and long-term solutions.", 
-    #     "Consult a Financial Advisor", 7, 1),
-    #     ("Focus on essential expenses and avoid unnecessary spending.", 
-    #     "Focus on Essential Expenses", 7, 1),
-    #     ("Seek financial aid programs or scholarships, if applicable.", 
-    #     "Seek Financial Aid", 7, 2),
-    #     ("Share your financial concerns with trusted family members or friends for support.", 
-    #     "Share Financial Concerns", 7, 2),
-    # ]
-
-    # # Inserimento dei record nel database
-    # for description, title, category_id, level in records:
-    #     cursor.execute('''
-    #     INSERT INTO suggestions (title, description, category_id, level)
-    #     VALUES (?, ?, ?, ?)
-    #     ''', (title, description, category_id, level))    
+def add_suggestions():
+    conn = sqlite3.connect('mindhug.db')
+    c = conn.cursor()
+    
+    # Dati da inserire
+    records = [
+        ("Balance Studies and Personal Life", "Maintain your balance between studies and personal life. Keep organizing your time effectively.", 5, 0),
+        ("Time Management Techniques", "Use techniques like time-blocking to ensure you have time for relaxing activities.", 5, 0),
+        ("Discuss Workloads", "Reduce academic pressure by discussing workloads and deadlines with your professors or tutors.", 5, 1),
+        ("Stress Management Tips", "Try stress management techniques such as meditation or breathing exercises.", 5, 1),
+        ("Consult Academic Counselors", "Consider consulting an academic counselor for personalized support.", 5, 2),
+        ("Reduce Course Loads", "Explore options to reduce course loads or assignments, if possible.", 5, 2),
+        ("Join Support Groups", "Join support groups or seek psychological help to manage academic stress effectively.", 5, 2),
+        ("Stay Motivated", "Stay motivated and continue to track your progress.", 6, 0),
+        ("Set SMART Goals", "Set SMART (Specific, Measurable, Achievable, Relevant, Time-bound) goals to further improve.", 6, 0),
+        ("Improve One Subject at a Time", "Focus on improving in small areas, like working on one subject at a time.", 6, 1),
+        ("Use Study Apps", "Use tools like study apps or join study groups to enhance learning.", 6, 1),
+        ("Focus on Learning Process", "Shift your focus from grades to the learning process itself.", 6, 2),
+        ("Feedback from Tutors", "Consult your tutor or professor for feedback and recovery strategies.", 6, 2),
+        ("Take an Academic Break", "Consider taking an academic break if necessary.", 6, 2),
+        ("Identify Study Satisfaction", "Identify what gives you satisfaction in your studies and incorporate it further into your routine.", 3, 0),
+        ("Balance Studies and Hobbies", "Keep balancing your time between studying and personal hobbies.", 3, 0),
+        ("Engaging Study Methods", "Explore more engaging study methods, such as gamification or visual tools like mind maps.", 3, 1),
+        ("Exchange Ideas with Peers", "Connect with peers to exchange ideas and make studying more dynamic.", 3, 1),
+        ("Reflect on Academic Goals", "Reflect on your academic motivations and goals. Discuss them with a mentor or counselor.", 3, 2),
+        ("Optimize Study Environment", "Modify your study environment to make it more comfortable and less stressful.", 3, 2),
+        ("Regular Sleep Routine", "Maintain a regular sleep routine, going to bed and waking up at consistent times.", 1, 0),
+        ("Avoid Caffeine Before Bedtime", "Avoid caffeine or electronic devices before bedtime.", 1, 0),
+        ("Relaxation Techniques", "Try relaxation techniques like meditation or reading a book before sleeping.", 1, 1),
+        ("Create a Sleep-Friendly Environment", "Create a better sleep environment: ensure it’s dark, quiet, and at a comfortable temperature.", 1, 1),
+        ("Consult a Doctor for Sleep Issues", "Consult a doctor if you’re experiencing insomnia or sleep disturbances.", 1, 2),
+        ("Adopt a Restorative Evening Routine", "Adopt an evening routine that encourages deep, restorative sleep.", 1, 2),
+        ("Follow a Balanced Diet", "Continue following a balanced diet, including fresh and nutritious foods.", 2, 0),
+        ("Monitor Hydration", "Monitor your hydration and ensure you drink enough water.", 2, 0),
+        ("Reduce Sugars and Processed Foods", "Reduce the intake of sugars and processed foods. Add more fruits, vegetables, and proteins to your diet.", 2, 1),
+        ("Plan Meals in Advance", "Plan meals in advance to avoid skipping meals.", 2, 1),
+        ("Consult a Nutritionist", "Consult a nutritionist to create a diet plan that enhances both mental and physical well-being.", 2, 2),
+        ("Avoid Comfort Food", "Avoid relying on comfort food and seek healthier alternatives to manage stress.", 2, 2),
+        ("Share Your Feelings", "Talk to someone you trust about your feelings, even if they seem mild.", 8, 0),
+        ("Track Emotions", "Keep track of your emotions with a journal or a mental health app.", 8, 0),
+        ("Seek Professional Help", "Seek professional help from a counselor or psychologist. Don’t ignore these warning signs.", 8, 1),
+        ("Join Support Groups", "Join support groups to connect with others experiencing similar challenges.", 8, 1),
+        ("Reach Out in Crisis", "Reach out to a mental health professional or emergency services immediately.", 8, 2),
+        ("Talk to Trusted Friends", "Speak with trusted friends or family members and avoid dealing with these thoughts alone.", 8, 2),
+        ("Maintain Balance Between Work and Life", "Maintain a healthy balance between work/study and personal time.", 4, 0),
+        ("Take Regular Breaks", "Take regular breaks to enhance productivity and avoid burnout.", 4, 0),
+        ("Reduce Intense Study Hours", "Consider reducing intense study or work hours if possible.", 4, 1),
+        ("Use Productivity Techniques", "Use productivity techniques like the Pomodoro method to manage time effectively.", 4, 1),
+        ("Reduce Workload", "Consider significantly reducing your workload.", 4, 2),
+        ("Consult a Counselor for Time Management", "Consult a counselor for strategies to manage your time and stress more effectively.", 4, 2),
+        ("Monitor Your Expenses", "Continue monitoring your expenses and maintaining a good budget.", 7, 0),
+        ("Look for Ways to Save", "Look for ways to save or explore opportunities for additional income.", 7, 0),
+        ("Consult a Financial Advisor", "Talk to a financial advisor to identify short- and long-term solutions.", 7, 1),
+        ("Focus on Essential Expenses", "Focus on essential expenses and avoid unnecessary spending.", 7, 1),
+        ("Seek Financial Aid", "Seek financial aid programs or scholarships, if applicable.", 7, 2),
+        ("Share Financial Concerns", "Share your financial concerns with trusted family members or friends for support.", 7, 2),
+    ]
+    # Inserimento dei dati nella tabella suggestions
+    c.executemany('''
+    INSERT INTO suggestions (title, description, category_id, level)
+    VALUES (?, ?, ?, ?)
+    ''', records)
     conn.commit()
+    conn.close()
+    print("Suggerimenti inseriti con successo!")
 
+def add_categories():
+    conn = sqlite3.connect('mindhug.db')
+    c = conn.cursor()
+    
+    # Dati da inserire
+    records = [
+        ("sleep-duration")
+        ("dietary-habits")
+        ("study-satisfaction")
+        ("study-hours")
+        ("academic-pressure")
+        ("cgpa")
+        ("financial-stress")
+        ("suicidal-thoughts")    
+    ]
+    # Inserimento dei dati nella tabella suggestions
+    c.executemany('''
+    INSERT INTO suggestions (category)
+    VALUES (?)
+    ''', records)
+    conn.commit()
+    conn.close()
+    print("Categorie inseriti con successo!")
 
 def get_users():
     conn = sqlite3.connect('mindhug.db')
