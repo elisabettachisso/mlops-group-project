@@ -1,5 +1,5 @@
 import streamlit as st
-from auth import login, registration, logout, check_session
+from auth import login, registration, logout
 from pages import main_page, home_page
 
 # Inizializzazione dello stato
@@ -22,8 +22,7 @@ def main():
     )
 
     # Controllo della sessione
-    if check_session():
-        st.session_state.logged_in = True
+    if st.session_state.logged_in == True:
         st.session_state.page = "main"
 
     # Navigazione tra le pagine
