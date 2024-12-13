@@ -58,7 +58,7 @@ def login():
             st.session_state.user_id = user[0]
             # Imposta il cookie con un parametro di scadenza
             expiration_time = datetime.utcnow() + timedelta(seconds=10)
-            cookie_controller.set("user_id", st.session_state.user_id, expires=expiration_time)
+            cookie_controller.set("user_id", st.session_state.user_id, expires=expiration_time, same_site='strict')
             st.success("Login successful")
             time.sleep(0.5)
             st.rerun()
