@@ -55,7 +55,7 @@ def login():
             st.session_state.logged_in = True
             st.session_state.username = username
             st.session_state.user_id = user[0]
-            cookie_controller.set("user_id", st.session_state.user_id, max_age=3600)
+            cookie_controller.set("user_id", st.session_state.user_id, max_age=10)
             st.success("Login successful")
             time.sleep(0.5)  # Pause briefly before rerun
             st.rerun()
