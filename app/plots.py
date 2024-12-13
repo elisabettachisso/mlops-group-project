@@ -170,7 +170,7 @@ def plots(user_id, risk_percentage):
             df,
             x='timestamp',
             y='sleep_duration_numeric',
-            title="Sleep Duration",
+            title="Sleep Duration (h)",
             labels={'timestamp': "Time", 'sleep_duration_numeric': "Durata del Sonno (ore)"},
         )
 
