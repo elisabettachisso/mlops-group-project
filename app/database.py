@@ -122,7 +122,7 @@ def add_categories():
     ]
     # Inserimento dei dati nella tabella suggestions
     c.executemany('''
-    INSERT INTO suggestions (category)
+    INSERT INTO categories (category)
     VALUES (?)
     ''', records)
     conn.commit()
