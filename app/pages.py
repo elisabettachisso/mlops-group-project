@@ -99,7 +99,7 @@ def main_page():
             default_index=0,  # Indice dell'opzione selezionata di default
             orientation="horizontal",  # Modalità orizzontale
             styles={
-                "container": {"padding": "0!important", "background-color": "black"},
+                "container": {"padding": "0!important"},
                 "nav-link": {"font-size": "16px", "text-align": "center", "margin": "0px", "--hover-color": "lightblue"},
                 "nav-link-selected": {"background-color": "#0d6efd", "color": "white"},
             },

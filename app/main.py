@@ -20,20 +20,6 @@ def main():
     initial_sidebar_state="collapsed"
     )
 
-    st.markdown(
-    """
-    <style>
-    body {
-        background-color: black;
-        color: white;
-    }
-    .stApp {
-        background-color: black;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
     if check_session():
         main_page()
