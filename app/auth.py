@@ -22,6 +22,7 @@ def login():
     if login_button:
         user = verify_user(username, password)  # Verifica l'utente nel database
         if user:
+            log_user_access(user[0])
             st.session_state.logged_in = True
             st.session_state.username = username
             st.session_state.user_id = user[0]
@@ -31,7 +32,6 @@ def login():
             cookie_controller.set("user_id", user[0], expires=expiration_time)
 
             # Log dell'accesso utente
-            log_user_access(user[0])
 
             st.success("Login successful!")
             return True
