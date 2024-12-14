@@ -1,5 +1,5 @@
 import streamlit as st
-from database import initialize_database, add_response, get_responses, get_last_response, add_suggestions, add_categories
+from database import initialize_database, add_response, get_responses, get_all_responses, get_last_response, add_suggestions, add_categories
 from route import go_to_login, go_to_register
 from ml_utils import calculate_risk, avarage_risk_percentage, avarage_risk_percentage_allusers
 from plots import plot_risk_indicator, statistic_plots, statistic_plots_analyst
@@ -284,17 +284,10 @@ def main_page_analyst():
     st.write("© 2024 MindHug. All rights reserved.")
 
 def display_statistics_analyst(): 
-        st.header("Your personal statistics, based on the questionnaires you have completed:") 
-        responses = get_responses(st.session_state.user_id)
-        last_response = get_last_response(st.session_state.user_id)
-        if last_response:
-            values = last_response[0][2:14]  # Crea una lista con i valori da last_response
-            risk_percentage = calculate_risk(*values)  # Usa l'unpacking per passare i valori come argomenti separati
-
-            avarage_risk = avarage_risk_percentage_allusers()
-            statistic_plots_analyst(avarage_risk)
-        else:
-            st.error("No questionnaire has been filled out yet!")
+        st.header("All users statistics") 
+        responses = get_all_responses()
+        avarage_risk = avarage_risk_percentage_allusers()
+        statistic_plots_analyst(avarage_risk)
 
 
 def display_statistics(): 
