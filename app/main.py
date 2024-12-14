@@ -1,5 +1,5 @@
 import streamlit as st
-from auth import login, registration, logout, check_session
+from auth import login, registration, logout
 from pages import main_page, home_page, main_page_analyst
 
 # Inizializzazione dello stato
