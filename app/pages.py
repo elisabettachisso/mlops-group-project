@@ -1,8 +1,8 @@
 import streamlit as st
 from database import initialize_database, add_response, get_responses, get_last_response, add_suggestions, add_categories
 from route import go_to_login, go_to_register
-from ml_utils import calculate_risk, avarage_risk_percentage
-from plots import plot_risk_indicator, statistic_plots
+from ml_utils import calculate_risk, avarage_risk_percentage, avarage_risk_percentage_allusers
+from plots import plot_risk_indicator, statistic_plots, statistic_plots_analyst
 from auth import logout
 from streamlit_option_menu import option_menu
 from PIL import Image
@@ -93,7 +93,7 @@ def main_page():
         selected = option_menu(
             menu_title=None,  # Non mostrare un titolo (barra orizzontale)
             options=["Home", "Fill Questionnaire", "Tips", "Statistics"],  # Opzioni di navigazione
-            icons=["house", "bar-chart", "lightbulb", "file-text"],  # Icone da FontAwesome
+            icons=["house", "file-text", "lightbulb", "bar-chart",],  # Icone da FontAwesome
             menu_icon="cast",  # Icona del menu (non visibile in modalità orizzontale)
             default_index=0,  # Indice dell'opzione selezionata di default
             orientation="horizontal",  # Modalità orizzontale
@@ -186,6 +186,115 @@ def main_page():
     st.markdown("---")
     st.write("© 2024 MindHug. All rights reserved.")
 
+def main_page_analyst():
+
+    st.write(f"Ciao, {st.session_state.username} 🙂")
+
+    def navigation_bar_analyst():
+        selected = option_menu(
+            menu_title=None,  # Non mostrare un titolo (barra orizzontale)
+            options=["Home", "General Statistics"],  # Opzioni di navigazione
+            icons=["house", "bar-chart"],  # Icone da FontAwesome
+            menu_icon="cast",  # Icona del menu (non visibile in modalità orizzontale)
+            default_index=0,  # Indice dell'opzione selezionata di default
+            orientation="horizontal",  # Modalità orizzontale
+            styles={
+                "container": {"padding": "0!important"},
+                "nav-link": {"font-size": "16px", "text-align": "center", "margin": "0px", "--hover-color": "lightblue"},
+                "nav-link-selected": {"background-color": "#0d6efd", "color": "white"},
+            },
+        )
+        return selected
+
+    # Mostra la barra di navigazione
+    selection = navigation_bar_analyst()
+
+
+    if selection == "Home":
+        title = "MindHug"  
+
+        col1, col2 = st.columns([1, 5])  # Colonna per il logo e colonna per il titolo
+
+        with col1:
+            st.image(logo_path, width=200)  # Imposta la larghezza del logo
+
+        with col2:
+            st.markdown(f"<h1>Welcome to <span style='color:#0d6efd' ;'>{title}</span></h1>", unsafe_allow_html=True)
+        
+        st.subheader("Your support for mental well-being")
+
+        # Introduction text
+        st.write("""
+        This app is designed to help you take control of your physical and mental health by providing insights and personalized advice based on your lifestyle. With our simple yet powerful features, you can track your well-being and make informed decisions to live a healthier, happier life.
+        """)
+
+        # Key Features Section
+        st.subheader("Key Features:")
+
+        # Feature 1: Self-assessment Questionnaire
+        st.write("""
+        1. **Self-assessment Questionnaire:**  
+        Start by completing a quick questionnaire that evaluates your current physical and mental well-being. The questions are tailored to give you a comprehensive view of your lifestyle.
+        """)
+
+        # Feature 2: Personalized Recommendations
+        st.write("""
+        2. **Personalized Recommendations:**  
+        Based on your responses, the app offers personalized tips and advice to help you improve your overall well-being. Whether it’s adjusting daily habits or finding new ways to cope with stress, you'll receive valuable insights to guide you along the way.
+        """)
+
+        # Feature 3: Visualize Your Progress
+        st.write("""
+        3. **Visualize Your Progress:**  
+        With beautifully designed charts and graphs, you can track your progress over time. The app stores your historical data, allowing you to see how your well-being evolves and identify trends that may need attention.
+        """)
+
+        # Goal Section
+        st.subheader("The Goal:")
+
+        st.write("""
+        The aim of this app is to raise awareness about how your lifestyle choices impact your mental health, particularly the risk of depression. With real-time updates on percentages and actionable areas for improvement, you’ll always know where you stand and how to take proactive steps toward a better life.
+        """)
+
+        # How to Use Section
+        st.subheader("How to Use It:")
+
+        st.write("""
+        The app is designed to be used periodically. By completing a new questionnaire each time, you can monitor your progress, see improvements, and make adjustments to continue enhancing your well-being. It’s a powerful tool for building a healthier, more balanced life one step at a time.
+        """)
+
+        last_response = get_last_response(st.session_state.user_id)
+        if last_response:
+            values = last_response[0][2:14]  # Crea una lista con i valori da last_response
+            risk_percentage = calculate_risk(*values)  # Usa l'unpacking per passare i valori come argomenti separati
+            st.plotly_chart(plot_risk_indicator(risk_percentage))
+        else: 
+            st.error("No questionnaire has been filled out yet!")
+        
+    if selection == "General Statistics": 
+        display_statistics_analyst()
+
+    if st.button("Logout"):
+         logout()
+         st.rerun()
+
+    
+    # Footer
+    st.markdown("---")
+    st.write("© 2024 MindHug. All rights reserved.")
+
+def display_statistics_analyst(): 
+        st.header("Your personal statistics, based on the questionnaires you have completed:") 
+        responses = get_responses(st.session_state.user_id)
+        last_response = get_last_response(st.session_state.user_id)
+        if last_response:
+            values = last_response[0][2:14]  # Crea una lista con i valori da last_response
+            risk_percentage = calculate_risk(*values)  # Usa l'unpacking per passare i valori come argomenti separati
+
+            avarage_risk = avarage_risk_percentage_allusers()
+            statistic_plots_analyst(avarage_risk)
+        else:
+            st.error("No questionnaire has been filled out yet!")
 
 
 def display_statistics(): 

@@ -198,6 +198,14 @@ def get_responses(user_id):
     conn.close()
     return responses
 
+def get_all_responses():
+    conn = sqlite3.connect('mindhug.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM surveys')
+    responses = c.fetchall()
+    conn.close()
+    return responses
+
 def get_last_response(user_id):
     conn = sqlite3.connect('mindhug.db')
     c = conn.cursor()
