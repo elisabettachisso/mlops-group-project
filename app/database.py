@@ -188,3 +188,11 @@ def get_user_last_log(user_id):
     log = cursor.fetchone()
     conn.close()
     return log
+
+def get_users_logs():
+    conn = sqlite3.connect('mindhug.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT l.id, l.user_id, u.username, u.name, l.timestamp FROM user_access_log l INNER JOIN users u ON u.id = l.user_id ORDER BY l.id DESC LIMIT 10')
+    log = cursor.fetchall()
+    conn.close()
+    return log

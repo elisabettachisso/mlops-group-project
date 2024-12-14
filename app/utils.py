@@ -6,5 +6,5 @@ def convert_df_to_csv(df):
     return csv
 
 def display_table(df):
-    st.subheader("Dati:")
+    st.subheader("Data:")
     st.dataframe(df)

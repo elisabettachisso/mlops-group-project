@@ -1,5 +1,5 @@
 import streamlit as st
-from database import initialize_database, add_response, get_all_responses, get_last_response, add_suggestions, add_user
+from database import initialize_database, add_response, get_all_responses, get_last_response, add_suggestions, add_user, get_users_logs
 from ml_utils import calculate_risk, avarage_risk_percentage, avarage_risk_percentage_allusers
 from plots import plot_stimated_depression_indicator, statistic_plots
 from ml_utils import preprocess_responses_user, preprocess_all_responses
@@ -102,7 +102,9 @@ def main_page_admin():
         display_general_statistics()
     if selection == "CSV downloads":
         display_csv_download()
-    if selection == "Add users":
+    if selection == "Users":
+        display_users_logs()
+        st.subheader("Add New User")
         with st.form("registration_form"):
             username = st.text_input("Username")
             name = st.text_input("Name")
@@ -261,7 +263,7 @@ def navigation_bar_admin():
     selected = option_menu(
         menu_title=None,  
         options=["Home", "Fill Questionnaire", "Tips", "Personal Statistics",
-                  "General Statistics", "CSV downloads", "Add users", "Add suggestions"],  
+                  "General Statistics", "CSV downloads", "Users", "Add suggestions"],  
         icons=["house", "file-text", "lightbulb", "bar-chart", "bar-chart","cloud-download", "person-plus","lightbulb"],  
         menu_icon="cast",  
         default_index=0, 
@@ -384,9 +386,22 @@ def display_csv_download():
     csv_data = convert_df_to_csv(df)
     display_table(df)
     st.download_button(
-        label="Scarica il file CSV",
+        label="Download CSV file",
         data=csv_data,
-        file_name="dati.csv",
+        file_name="data.csv",
+        mime="text/csv"
+    )
+
+def display_users_logs():
+    column_names =["id", "user_id", "username", "name", "timestamp"]
+    data = get_users_logs()
+    df = pd.DataFrame(data, columns=column_names)
+    csv_data = convert_df_to_csv(df)
+    display_table(df)
+    st.download_button(
+        label="Download CSV file",
+        data=csv_data,
+        file_name="logs.csv",
         mime="text/csv"
     )
 
