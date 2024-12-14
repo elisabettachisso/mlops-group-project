@@ -25,7 +25,7 @@ def main():
         st.session_state.page = "main"
 
     # Navigazione tra le pagine
-    if st.session_state.logged_in and st.session_state.username == "dataanalyst "and st.session_state.page == "main":
+    if st.session_state.logged_in and st.session_state.username == "dataanalyst" and st.session_state.page == "main":
         main_page_analyst()
     elif st.session_state.logged_in and st.session_state.page == "main":
         main_page()
