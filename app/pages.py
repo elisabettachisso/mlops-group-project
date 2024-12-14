@@ -286,6 +286,7 @@ def main_page_analyst():
 def display_statistics_analyst(): 
         st.header("All users statistics") 
         responses = get_all_responses()
+        risk_percentage = calculate_risk(responses)
         avarage_risk = avarage_risk_percentage_allusers()
         statistic_plots_analyst(avarage_risk)
 
