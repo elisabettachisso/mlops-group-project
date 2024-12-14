@@ -4,10 +4,12 @@ from database import get_responses, get_all_responses
 import matplotlib.pyplot as plt
 import streamlit as st
 
+model_path = 'app/model/random_forest_model.pkl'
+
 def load_model():
     #load the saved model from the file. .pkl
     try:
-        with open('app/model/random_forest_model.pkl', 'rb') as file:
+        with open(model_path, 'rb') as file:
             model = pickle.load(file)
         return model
     except FileNotFoundError:
