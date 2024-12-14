@@ -21,11 +21,7 @@ def main():
         initial_sidebar_state="collapsed"
     )
 
-    # Controllo della sessione
-    if check_session():
-        
-        st.session_state.logged_in = True
-        st.session_state.page = "main"
+    st.session_state.page = "main"
 
     # Navigazione tra le pagine
     if st.session_state.logged_in and st.session_state.page == "main":
