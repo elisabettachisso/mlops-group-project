@@ -256,7 +256,10 @@ def display_statistics_analyst():
         #                    response[9], response[10], response[11], response[12], response[13])
         #     risk_values.append(risk_percentage)
         avarage_risk = avarage_risk_percentage_allusers()
-        plots_analyst(avarage_risk)
+        if avarage_risk:
+            plots_analyst(avarage_risk)
+        else: 
+            st.error("No questionnaire has been filled out yet!")
 
 
 def display_statistics(): 
@@ -282,18 +285,18 @@ def display_suggestions():
                 st.markdown(f"**{response[1]}**" + "\n  - " + response[2])
         else:
             st.error("No questionnaire has been filled out yet!")
-        if st.button("Aggiungi Suggestions"):
-            try:
-                add_suggestions()
-                st.success("Suggestions added successfully!")
-            except Exception as e:
-                st.error(f"An error occurred while adding suggestions: {e}")
-        if st.button("Aggiungi Categorie"):
-            try:
-                add_categories()
-                st.success("categories added successfully!")
-            except Exception as e:
-                st.error(f"An error occurred while adding suggestions: {e}")
+        # if st.button("Aggiungi Suggestions"):
+        #     try:
+        #         add_suggestions()
+        #         st.success("Suggestions added successfully!")
+        #     except Exception as e:
+        #         st.error(f"An error occurred while adding suggestions: {e}")
+        # if st.button("Aggiungi Categorie"):
+        #     try:
+        #         add_categories()
+        #         st.success("categories added successfully!")
+        #     except Exception as e:
+        #         st.error(f"An error occurred while adding suggestions: {e}")
         st.markdown("### Useful Resources")
         st.write(
          "- [Mindfulness Exercises](https://www.headspace.com)\n"

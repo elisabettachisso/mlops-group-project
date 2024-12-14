@@ -101,18 +101,21 @@ def avarage_risk_percentage(user_id):
 
 def avarage_risk_percentage_allusers():
     responses = get_all_responses()
+    if responses:
 
     #for i in range(len(responses)):
         #avarage = [0] * len(responses)
         #values = responses[0][2:14] 
         #avarage[i] = calculate_risk(responses[i][values])
-    values = []
-    for response in responses:
-        selected_values = [response[2], response[3], response[4], response[5], response[6], response[7], response[8],
-                           response[9], response[10], response[11], response[12], response[13]]
-                           
-        value = calculate_risk(*selected_values)
-        values.append(value)
-    avarage_risk = sum(values) / len(values)
-    return avarage_risk
+        values = []
+        for response in responses:
+            selected_values = [response[2], response[3], response[4], response[5], response[6], response[7], response[8],
+                            response[9], response[10], response[11], response[12], response[13]]
+                            
+            value = calculate_risk(*selected_values)
+            values.append(value)
+        avarage_risk = sum(values) / len(values)
+        return avarage_risk
+    else: 
+        return 
 
