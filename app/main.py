@@ -1,8 +1,7 @@
 import streamlit as st
 from auth import login, registration, logout
-from pages import main_page, home_page, main_page_analyst, main_page_admin  
+from pages import home_page, main_page_analyst, main_page_admin , main_page_users
 
-# Inizializzazione dello stato
 if "logged_in" not in st.session_state: 
     st.session_state.logged_in = False 
 if "username" not in st.session_state: 
@@ -12,7 +11,7 @@ if "user_id" not in st.session_state:
 if "page" not in st.session_state: 
     st.session_state.page = "home"
 
-# Funzione principale
+
 def main():
     st.set_page_config(
         page_title="Welcome to Mindhug",
@@ -24,13 +23,12 @@ def main():
     if st.session_state.logged_in == True:
         st.session_state.page = "main"
 
-    # Navigazione tra le pagine
     if st.session_state.logged_in and st.session_state.username == "dataanalyst" and st.session_state.page == "main":
         main_page_analyst()
     elif st.session_state.logged_in and st.session_state.username == "admin" and st.session_state.page == "main":
         main_page_admin()
     elif st.session_state.logged_in and st.session_state.page == "main":
-        main_page()
+        main_page_users()
     elif st.session_state.page == "home":
         home_page()
     elif st.session_state.page == "login":
