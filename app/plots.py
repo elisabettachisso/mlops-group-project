@@ -198,7 +198,7 @@ def plots(user_id, risk_percentage):
             st.plotly_chart(fig_sleep, use_container_width=True)
         
 
-def plots_analyst(risk_percentage):
+def plots_analyst(average_risk):
 
     # Recupera le risposte dell'utente
     responses = get_all_responses()
@@ -319,7 +319,7 @@ def plots_analyst(risk_percentage):
             labels={'timestamp': "Time", 'sleep_duration_numeric': "Durata del Sonno (ore)"},
         )
 
-        st.plotly_chart(plot_avarage_indicator(risk_percentage))  
+        st.plotly_chart(plot_avarage_indicator(average_risk))  
             
         col2, col3, col4 = st.columns(3)
 
@@ -396,5 +396,5 @@ def statistic_plots(user_id, risk_percentage):
     plots(user_id, risk_percentage)
     
 def statistic_plots_analyst(risk_percentage):
-    plots(risk_percentage)
+    plots_analyst(risk_percentage)
 

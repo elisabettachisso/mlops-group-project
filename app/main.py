@@ -1,6 +1,6 @@
 import streamlit as st
 from auth import login, registration, logout
-from pages import main_page, home_page, main_page_analyst
+from pages import main_page, home_page, main_page_analyst, main_page_admin  
 
 # Inizializzazione dello stato
 if "logged_in" not in st.session_state: 
@@ -27,6 +27,8 @@ def main():
     # Navigazione tra le pagine
     if st.session_state.logged_in and st.session_state.username == "dataanalyst" and st.session_state.page == "main":
         main_page_analyst()
+    elif st.session_state.logged_in and st.session_state.username == "admin" and st.session_state.page == "main":
+        main_page_admin()
     elif st.session_state.logged_in and st.session_state.page == "main":
         main_page()
     elif st.session_state.page == "home":
