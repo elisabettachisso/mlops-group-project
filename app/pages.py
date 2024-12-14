@@ -13,7 +13,7 @@ import time
 
 initialize_database()
 
-logo_path = "app/images/logomindhug.png"
+logo_path = "images/logomindhug.png"
 
 def home_page():
 

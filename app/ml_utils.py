@@ -4,7 +4,7 @@ from database import get_responses, get_all_responses
 import matplotlib.pyplot as plt
 import streamlit as st
 
-model_path = 'app/model/random_forest_model.pkl'
+model_path = 'model/random_forest_model.pkl'
 
 def load_model():
     #load the saved model from the file. .pkl

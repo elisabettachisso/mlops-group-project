@@ -41,19 +41,23 @@ def registration():
         email = st.text_input("Email")
         password = st.text_input("Password", type="password")
         password_confirm = st.text_input("Confirm Password", type="password")
+        consent = st.checkbox("I agree with the treatment of my personal data")
         register_button = st.form_submit_button("Register")
         back_button = st.form_submit_button("Back")
 
     if register_button:
         if password != password_confirm:
             st.error("Passwords do not match")
-        elif add_user(username, name, email, password):
-            st.success("Registration successful! Please login.")
-            time.sleep(0.5) 
-            st.session_state.page = "login"
-            st.rerun()
+        if consent:
+            if add_user(username, name, email, password):
+                st.success("Registration successful! Please login.")
+                time.sleep(0.5) 
+                st.session_state.page = "login"
+                st.rerun()
+            else:
+                st.error("Username already exists. Please try another one.")
         else:
-            st.error("Username already exists. Please try another one.")
+            st.error("You have to give your consent for registration")
     if back_button:
         st.session_state.page = "home"
         st.rerun()
