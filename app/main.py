@@ -25,7 +25,9 @@ def main():
         st.session_state.page = "main"
 
     # Navigazione tra le pagine
-    if st.session_state.logged_in and st.session_state.page == "main":
+    if st.session_state.logged_in and st.session_state.username == "dataanalyst "and st.session_state.page == "main":
+        main_page_analyst()
+    elif st.session_state.logged_in and st.session_state.page == "main":
         main_page()
     elif st.session_state.page == "home":
         home_page()
@@ -41,9 +43,6 @@ def main():
         st.session_state.page = "home"
         st.session_state.logged_in = False
         st.rerun()
-    # Navigazione tra le pagine
-    elif st.session_state.logged_in and st.session_state.username == "dataanalyst "and st.session_state.page == "main":
-        main_page_analyst()
 # Entry point
 if __name__ == "__main__":
     main()
