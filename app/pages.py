@@ -373,7 +373,8 @@ def main_page_admin():
                     st.rerun()
                 else:
                     st.error("Username already exists. Please try another one.")
-                    time.sleep(0.5)
+                    time.sleep(0.5) 
+                    st.rerun()
 
 
         if selection == "Add suggestions":
